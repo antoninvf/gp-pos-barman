@@ -1,6 +1,7 @@
 import { Flex, NavLink, Paper, Title } from "@mantine/core";
-import { IconBottleFilled, IconGauge } from "@tabler/icons-react";
+import { IconBottleFilled, IconGauge, IconToolsKitchen } from "@tabler/icons-react";
 import BarmanLogo from "../BarmanLogo/BarmanLogo";
+import Link from "next/link";
 
 export default function Navigation() {
   return (
@@ -10,7 +11,15 @@ export default function Navigation() {
         p={"1rem"}
         label="Dashboard"
         leftSection={<IconGauge size="1rem" stroke={1.5} />}
+        component={Link}
         href="/"
+      ></NavLink>
+      <NavLink
+        p={"1rem"}
+        label="Kitchen"
+        leftSection={<IconToolsKitchen size="1rem" stroke={1.5} />}
+        component={Link}
+        href="/kitchen"
       ></NavLink>
     </Paper>
   );
