@@ -25,7 +25,7 @@ public class BarmanController : ControllerBase
         return Ok("Server is running");
     }
 
-    [HttpGet("foodqueue")]
+    [HttpGet("foodQueue")]
     public ActionResult GetFoodQueue()
     {
         // return json of all foodqueue
