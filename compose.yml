@@ -1,0 +1,40 @@
+services:
+  frontend:
+    build: frontend/.
+    restart: on-failure
+    ports:
+      - "8000:3000"
+    depends_on:
+      - backend
+  backend:
+    build: be-barman/be-barman/.
+    restart: on-failure
+    ports:
+      - "8001:5036"
+    depends_on:
+      - mariadb
+  mariadb:
+    image: mariadb:10.11.3
+    restart: always
+    ports:
+      - "8003:3306"
+    command: --init-file /data/application/init.sql
+    environment:
+      MYSQL_DATABASE: barman
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_CHARSET: utf8mb4_unicode_ci
+    volumes:
+      - ./barman.sql:/data/application/init.sql
+      - ./mariadb-data:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - "8004:80"
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: changeme
+    depends_on:
+      - mariadb
+    
