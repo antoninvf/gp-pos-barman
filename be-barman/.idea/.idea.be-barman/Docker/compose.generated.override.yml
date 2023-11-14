@@ -1,0 +1,23 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  backend:
+    build:
+      context: "/Users/antonin/Desktop/gp-pos-barman/be-barman/be-barman"
+      dockerfile: "Dockerfile"
+      target: "build-env"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/be-barman.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      NUGET_PACKAGES: "/Users/antonin/.nuget/packages"
+      NUGET_FALLBACK_PACKAGES: "/Users/antonin/.nuget/packages"
+    image: "be-barman:dev"
+    ports: []
+    volumes:
+    - "/Users/antonin/.nuget/packages:/root/.nuget/fallbackpackages"
+    - "/Users/antonin/Desktop/gp-pos-barman/be-barman/be-barman:/app:rw"
+    - "/Users/antonin/Desktop/gp-pos-barman/be-barman:/src:rw"
+    working_dir: "/app"

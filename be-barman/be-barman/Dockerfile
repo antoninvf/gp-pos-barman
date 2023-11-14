@@ -5,12 +5,12 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
 EXPOSE 5036/tcp
 
 ENV ASPNETCORE_URLS=http://*:5036
+ENV RUNNING_IN_DOCKER=true
 
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "be-barman.dll"]

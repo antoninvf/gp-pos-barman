@@ -1,4 +1,5 @@
 using be_barman.Data;
+using be_barman.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,16 +21,94 @@ public class BarmanController : ControllerBase
     }
     
     [HttpGet]
-    public ActionResult Get()
+    public ActionResult Get() => NotFound();
+    
+    [HttpGet("{*url}", Order = 999)]
+    public ActionResult Get404() => NotFound();
+
+    //? KitchenQueue
+    [HttpGet("kitchenQueue")]
+    public ActionResult GetKitchenQueue()
     {
-        return Ok("Server is running");
+        return Ok(_dbContext.KitchenQueueEntities.ToList());
     }
 
-    [HttpGet("foodQueue")]
-    public ActionResult GetFoodQueue()
+    [HttpGet("kitchenQueue/{uuid}")]
+    public ActionResult GetKitchenQueue(string uuid)
     {
-        // return json of all foodqueue
-        return Ok(_dbContext.FoodQueueEntities.ToList());
+        return Ok(_dbContext.KitchenQueueEntities.Find(uuid));
     }
     
+    [HttpPost("kitchenQueue")]
+    public ActionResult PostKitchenQueue([FromBody] KitchenQueueEntity kitchenQueueEntity)
+    {
+        _dbContext.KitchenQueueEntities.Add(kitchenQueueEntity);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+    
+    [HttpDelete("kitchenQueue/{uuid}")]
+    public ActionResult DeleteKitchenQueue(string uuid)
+    {
+        if (_dbContext.KitchenQueueEntities.Find(uuid) == null) return NotFound();
+        _dbContext.KitchenQueueEntities.Remove(_dbContext.KitchenQueueEntities.Find(uuid));
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+    
+    [HttpDelete("kitchenQueue/clear")]
+    public ActionResult ClearKitchenQueue()
+    {
+        _dbContext.KitchenQueueEntities.RemoveRange(_dbContext.KitchenQueueEntities);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+
+    //? Products
+    [HttpGet("products")]
+    public ActionResult GetProducts()
+    {
+        return Ok(_dbContext.ProductEntities.ToList());
+    }
+
+    [HttpGet("product/{uuid}")]
+    public ActionResult GetProducts(string uuid)
+    {
+        return Ok(_dbContext.ProductEntities.Find(uuid));
+    }
+    
+    [HttpPost("products")]
+    public ActionResult PostProducts([FromBody] ProductEntity productEntity)
+    {
+        _dbContext.ProductEntities.Add(productEntity);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+    
+    //? Tables
+    [HttpGet("tables")]
+    public ActionResult GetTables()
+    {
+        return Ok(_dbContext.TableEntities.ToList());
+    }
+
+    [HttpGet("table/{uuid}")]
+    public ActionResult GetTables(string uuid)
+    {
+        return Ok(_dbContext.TableEntities.Find(uuid));
+    }
+    
+    [HttpGet("tables/{room}")]
+    public ActionResult GetTablesByRoom(string room)
+    {
+        return Ok(_dbContext.TableEntities.Where(x => x.Room.ToLower().Equals(room.ToLower())).ToList());
+    }
+    
+    [HttpPost("tables")]
+    public ActionResult PostTables([FromBody] TableEntity tableEntity)
+    {
+        _dbContext.TableEntities.Add(tableEntity);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
 }
