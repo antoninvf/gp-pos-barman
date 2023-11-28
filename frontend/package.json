@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn api-generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "api-generate": "openapi-zod-client http://localhost:8001/api-docs/v1/swagger.json -o src/modules/api/zodios/zodios-client.ts -t src/modules/api/zodios/zodios-template.hbs  --with-alias --complexity-threshold='<5' --export-schemas true"
   },
   "dependencies": {
     "@mantine/carousel": "^7.0.2",
@@ -22,12 +23,15 @@
     "@mantine/spotlight": "^7.0.2",
     "@mantine/tiptap": "^7.0.2",
     "@tabler/icons-react": "^2.35.0",
+    "@tanstack/react-query": "^5.8.4",
     "@tiptap/extension-link": "^2.1.11",
     "@tiptap/react": "^2.1.11",
     "@tiptap/starter-kit": "^2.1.11",
+    "@zodios/react": "^10.4.5",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^8.0.0-rc14",
     "next": "13.4.4",
+    "openapi-zod-client": "^1.13.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

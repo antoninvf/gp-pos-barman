@@ -19,12 +19,6 @@ public class BarmanController : ControllerBase
         _logger = logger;
         _dbContext = dbContext;
     }
-    
-    [HttpGet]
-    public ActionResult Get() => NotFound();
-    
-    [HttpGet("{*url}", Order = 999)]
-    public ActionResult Get404() => NotFound();
 
     //? KitchenQueue
     [HttpGet("kitchenQueue")]

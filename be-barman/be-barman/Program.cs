@@ -48,8 +48,18 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Swagger is required for zodios and openapi
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwagger(c =>
+{
+    c.RouteTemplate = "api-docs/{documentName}/swagger.json";
+});
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/api-docs/v1/swagger.json", "Barman API V1");
+    c.RoutePrefix = "api-docs";
+});
+
+
+app.UseStaticFiles();
 
 app.UseCors(AllowSpecificOrigins);
 
