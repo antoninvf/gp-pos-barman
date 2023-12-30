@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "P9dGrVgqaNypvkcQVkPNH+dtekC/BtOtNA1yVRdUG4CQk7s7eHRgsX5t5SMcb6cp4PWT4DrQKeNj91iG44jYPQ==",
+  "dgSpecHash": "wLs/l18LmeHgzshsO9DJ7OJ+NiLieLqoB7gupQpvYohqobK3es9T124XrXhTT+wQe4zRrJqP92CrZANYrtRX0A==",
   "success": true,
   "projectFilePath": "/Users/antonin/Desktop/gp-pos-barman/be-barman/be-barman/be-barman.csproj",
   "expectedPackageFiles": [
@@ -49,7 +49,10 @@
     "/Users/antonin/.nuget/packages/system.buffers/4.5.0/system.buffers.4.5.0.nupkg.sha512",
     "/Users/antonin/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",
     "/Users/antonin/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
+    "/Users/antonin/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.netcore.app.ref/7.0.14/microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.14/microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.netcore.app.host.osx-arm64/7.0.14/microsoft.netcore.app.host.osx-arm64.7.0.14.nupkg.sha512"
   ],
   "logs": []
 }
