@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn api-generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "api-generate": "openapi-zod-client http://localhost:8001/api-docs/v1/swagger.json -o src/modules/api/zodios/zodios-client.ts -t src/modules/api/zodios/zodios-template.hbs  --with-alias --complexity-threshold='<5' --export-schemas true"
