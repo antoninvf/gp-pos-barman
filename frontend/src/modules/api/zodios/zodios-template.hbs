@@ -1,5 +1,6 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { ZodiosHooks } from "@zodios/react";
+import {env} from '~/env';
 
 import { z } from "zod";
 
@@ -82,7 +83,8 @@ const endpoints = makeApi([
 {{/each}}
 ]);
 
-export const {{options.apiClientName}} = new Zodios(endpoints);
+
+export const {{options.apiClientName}} = new Zodios({{#if options.baseUrl}}"{{options.baseUrl}}"{{else}}env.NEXT_PUBLIC_SERVER_URL{{/if}}, endpoints);
 export const apiHooks = new ZodiosHooks("barman", {{options.apiClientName}});
 
 
