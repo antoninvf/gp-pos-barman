@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace be_barman.Migrations
 {
     /// <inheritdoc />
-    public partial class barman : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,17 +15,20 @@ namespace be_barman.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "FoodQueueEntities",
+                name: "KitchenQueueEntities",
                 columns: table => new
                 {
                     UUID = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    ProductID = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Note = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Timestamp = table.Column<long>(type: "bigint", nullable: true, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FoodQueueEntities", x => x.UUID);
+                    table.PrimaryKey("PK_KitchenQueueEntities", x => x.UUID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -37,11 +40,11 @@ namespace be_barman.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Category = table.Column<string>(type: "longtext", nullable: false)
+                    Category = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
+                    Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ImageURL = table.Column<string>(type: "longtext", nullable: false)
+                    ImageURL = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<int>(type: "int", nullable: false)
                 },
@@ -75,7 +78,7 @@ namespace be_barman.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FoodQueueEntities");
+                name: "KitchenQueueEntities");
 
             migrationBuilder.DropTable(
                 name: "ProductEntities");
