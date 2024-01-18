@@ -5,11 +5,11 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var AllowSpecificOrigins = "CorsPolicy";
+const string allowSpecificOrigins = "CorsPolicy";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: AllowSpecificOrigins,
-        policy => { policy.AllowAnyOrigin(); });
+    options.AddPolicy(name: allowSpecificOrigins,
+        policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod(); });
 });
 
 // Add services to the container.
@@ -18,13 +18,16 @@ builder.Services.AddControllers()
 
 DotEnv.Load(options: new DotEnvOptions(envFilePaths: new[] { ".env" }));
 
-MySqlServerVersion version = new MySqlServerVersion(new Version(int.Parse(DotEnv.Read()["DB_VERSION_MAJOR"]), int.Parse(DotEnv.Read()["DB_VERSION_MINOR"]), int.Parse(DotEnv.Read()["DB_VERSION_BUILD"])));
+MySqlServerVersion version = new MySqlServerVersion(new Version(int.Parse(DotEnv.Read()["DB_VERSION_MAJOR"]),
+    int.Parse(DotEnv.Read()["DB_VERSION_MINOR"]), int.Parse(DotEnv.Read()["DB_VERSION_BUILD"])));
 // Set server to host.docker.internal if running in Docker
 var dbServer = DotEnv.Read()["DB_SERVER"];
 if (Environment.GetEnvironmentVariable("RUNNING_IN_DOCKER") == "true") dbServer = "host.docker.internal";
 
-string connectionString = $"server={dbServer};port={DotEnv.Read()["DB_PORT"]};user={DotEnv.Read()["DB_USER"]};password={DotEnv.Read()["DB_PASSWORD"]};database={DotEnv.Read()["DB_NAME"]}";
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(connectionString, version, x => x.EnableRetryOnFailure()));
+string connectionString =
+    $"server={dbServer};port={DotEnv.Read()["DB_PORT"]};user={DotEnv.Read()["DB_USER"]};password={DotEnv.Read()["DB_PASSWORD"]};database={DotEnv.Read()["DB_NAME"]}";
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(connectionString, version, x => x.EnableRetryOnFailure()));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -48,10 +51,7 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Swagger is required for zodios and openapi
-app.UseSwagger(c =>
-{
-    c.RouteTemplate = "api-docs/{documentName}/swagger.json";
-});
+app.UseSwagger(c => { c.RouteTemplate = "api-docs/{documentName}/swagger.json"; });
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/api-docs/v1/swagger.json", "Barman API V1");
@@ -61,10 +61,17 @@ app.UseSwaggerUI(c =>
 
 app.UseStaticFiles();
 
-app.UseCors(AllowSpecificOrigins);
+app.UseCors(allowSpecificOrigins);
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+// generate database if it doesn't exist
+using (var serviceScope = app.Services.GetService<IServiceScopeFactory>()?.CreateScope())
+{
+    var context = serviceScope?.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    context?.Database.Migrate();
+}
 
 app.Run();
