@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "wLs/l18LmeHgzshsO9DJ7OJ+NiLieLqoB7gupQpvYohqobK3es9T124XrXhTT+wQe4zRrJqP92CrZANYrtRX0A==",
+  "dgSpecHash": "XraSmdAIxe1u51wsmyJh8zni5nVi+0hf25ivJ5+kPw5NEtK6om44katpAu7xkhD5ooyXBmp5hS1CjBcjlXhodw==",
   "success": true,
   "projectFilePath": "/Users/antonin/Desktop/gp-pos-barman/be-barman/be-barman/be-barman.csproj",
   "expectedPackageFiles": [
@@ -11,16 +11,16 @@
     "/Users/antonin/.nuget/packages/microsoft.aspnetcore.http.abstractions/2.2.0/microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "/Users/antonin/.nuget/packages/microsoft.aspnetcore.http.extensions/2.2.0/microsoft.aspnetcore.http.extensions.2.2.0.nupkg.sha512",
     "/Users/antonin/.nuget/packages/microsoft.aspnetcore.http.features/2.2.0/microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.aspnetcore.jsonpatch/7.0.13/microsoft.aspnetcore.jsonpatch.7.0.13.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/7.0.13/microsoft.aspnetcore.mvc.newtonsoftjson.7.0.13.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.aspnetcore.openapi/7.0.13/microsoft.aspnetcore.openapi.7.0.13.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.aspnetcore.jsonpatch/7.0.15/microsoft.aspnetcore.jsonpatch.7.0.15.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/7.0.15/microsoft.aspnetcore.mvc.newtonsoftjson.7.0.15.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.aspnetcore.openapi/7.0.15/microsoft.aspnetcore.openapi.7.0.15.nupkg.sha512",
     "/Users/antonin/.nuget/packages/microsoft.aspnetcore.staticfiles/2.2.0/microsoft.aspnetcore.staticfiles.2.2.0.nupkg.sha512",
     "/Users/antonin/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore/7.0.13/microsoft.entityframeworkcore.7.0.13.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore.abstractions/7.0.13/microsoft.entityframeworkcore.abstractions.7.0.13.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore.analyzers/7.0.13/microsoft.entityframeworkcore.analyzers.7.0.13.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore.design/7.0.13/microsoft.entityframeworkcore.design.7.0.13.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore.relational/7.0.13/microsoft.entityframeworkcore.relational.7.0.13.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore/7.0.15/microsoft.entityframeworkcore.7.0.15.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore.abstractions/7.0.15/microsoft.entityframeworkcore.abstractions.7.0.15.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore.analyzers/7.0.15/microsoft.entityframeworkcore.analyzers.7.0.15.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore.design/7.0.15/microsoft.entityframeworkcore.design.7.0.15.nupkg.sha512",
+    "/Users/antonin/.nuget/packages/microsoft.entityframeworkcore.relational/7.0.15/microsoft.entityframeworkcore.relational.7.0.15.nupkg.sha512",
     "/Users/antonin/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/antonin/.nuget/packages/microsoft.extensions.caching.abstractions/7.0.0/microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "/Users/antonin/.nuget/packages/microsoft.extensions.caching.memory/7.0.0/microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",
@@ -49,10 +49,7 @@
     "/Users/antonin/.nuget/packages/system.buffers/4.5.0/system.buffers.4.5.0.nupkg.sha512",
     "/Users/antonin/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",
     "/Users/antonin/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.netcore.app.ref/7.0.14/microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.14/microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512",
-    "/Users/antonin/.nuget/packages/microsoft.netcore.app.host.osx-arm64/7.0.14/microsoft.netcore.app.host.osx-arm64.7.0.14.nupkg.sha512"
+    "/Users/antonin/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }

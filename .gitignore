@@ -132,3 +132,14 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+be-barman/be-barman/obj/be-barman.csproj.nuget.dgspec.json
+be-barman/be-barman/obj/be-barman.csproj.nuget.g.props
+be-barman/be-barman/obj/Debug/net7.0/be-barman.AssemblyInfoInputs.cache
+be-barman/be-barman/obj/Debug/net7.0/be-barman.assets.cache
+be-barman/be-barman/obj/Debug/net7.0/be-barman.csproj.AssemblyReference.cache
+be-barman/be-barman/obj/Debug/net7.0/be-barman.GeneratedMSBuildEditorConfig.editorconfig
+be-barman/be-barman/obj/project.assets.json
+be-barman/be-barman/obj/project.nuget.cache
+be-barman/be-barman/obj/project.packagespec.json
+be-barman/be-barman/obj/rider.project.model.nuget.info
+be-barman/be-barman/obj/rider.project.restore.info
