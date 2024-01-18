@@ -2,7 +2,6 @@ using be_barman.Data;
 using be_barman.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace be_barman.Controllers;
 
@@ -22,36 +21,40 @@ public class BarmanController : ControllerBase
 
     //? KitchenQueue
     [HttpGet("kitchenQueue")]
-    public ActionResult GetKitchenQueue()
+    public ActionResult<IEnumerable<KitchenQueueEntity>> GetKitchenQueue()
     {
-        return Ok(_dbContext.KitchenQueueEntities.ToList());
+        return new ActionResult<IEnumerable<KitchenQueueEntity>>(_dbContext.KitchenQueueEntities.OrderByDescending(x => x.Timestamp).ToList());
     }
 
     [HttpGet("kitchenQueue/{uuid}")]
-    public ActionResult GetKitchenQueue(string uuid)
+    public ActionResult<KitchenQueueEntity?> GetKitchenQueue(string uuid)
     {
-        return Ok(_dbContext.KitchenQueueEntities.Find(uuid));
-    }
+        return new ActionResult<KitchenQueueEntity?>(_dbContext.KitchenQueueEntities.Find(uuid));
+}
     
     [HttpPost("kitchenQueue")]
-    public ActionResult PostKitchenQueue([FromBody] KitchenQueueEntity kitchenQueueEntity)
+    public IActionResult PostKitchenQueue([FromBody] KitchenQueueEntity kitchenQueueEntity)
     {
+        kitchenQueueEntity.UUID = Guid.NewGuid().ToString();
+        kitchenQueueEntity.Timestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds();
+        if (kitchenQueueEntity.ProductID == "") return BadRequest();
         _dbContext.KitchenQueueEntities.Add(kitchenQueueEntity);
         _dbContext.SaveChanges();
         return Ok();
     }
     
     [HttpDelete("kitchenQueue/{uuid}")]
-    public ActionResult DeleteKitchenQueue(string uuid)
+    public IActionResult DeleteKitchenQueue(string uuid)
     {
-        if (_dbContext.KitchenQueueEntities.Find(uuid) == null) return NotFound();
-        _dbContext.KitchenQueueEntities.Remove(_dbContext.KitchenQueueEntities.Find(uuid));
+        var kitchenQueueEntity = _dbContext.KitchenQueueEntities.Find(uuid);
+        if (kitchenQueueEntity == null) return NotFound();
+        _dbContext.KitchenQueueEntities.Remove(kitchenQueueEntity);
         _dbContext.SaveChanges();
         return Ok();
     }
     
     [HttpDelete("kitchenQueue/clear")]
-    public ActionResult ClearKitchenQueue()
+    public IActionResult ClearKitchenQueue()
     {
         _dbContext.KitchenQueueEntities.RemoveRange(_dbContext.KitchenQueueEntities);
         _dbContext.SaveChanges();
@@ -60,19 +63,19 @@ public class BarmanController : ControllerBase
 
     //? Products
     [HttpGet("products")]
-    public ActionResult GetProducts()
+    public IActionResult GetProducts()
     {
         return Ok(_dbContext.ProductEntities.ToList());
     }
 
     [HttpGet("product/{uuid}")]
-    public ActionResult GetProducts(string uuid)
+    public IActionResult GetProducts(string uuid)
     {
         return Ok(_dbContext.ProductEntities.Find(uuid));
     }
     
     [HttpPost("products")]
-    public ActionResult PostProducts([FromBody] ProductEntity productEntity)
+    public IActionResult PostProducts([FromBody] ProductEntity productEntity)
     {
         _dbContext.ProductEntities.Add(productEntity);
         _dbContext.SaveChanges();
@@ -81,25 +84,25 @@ public class BarmanController : ControllerBase
     
     //? Tables
     [HttpGet("tables")]
-    public ActionResult GetTables()
+    public IActionResult GetTables()
     {
         return Ok(_dbContext.TableEntities.ToList());
     }
 
     [HttpGet("table/{uuid}")]
-    public ActionResult GetTables(string uuid)
+    public IActionResult GetTables(string uuid)
     {
         return Ok(_dbContext.TableEntities.Find(uuid));
     }
     
     [HttpGet("tables/{room}")]
-    public ActionResult GetTablesByRoom(string room)
+    public IActionResult GetTablesByRoom(string room)
     {
         return Ok(_dbContext.TableEntities.Where(x => x.Room.ToLower().Equals(room.ToLower())).ToList());
     }
     
     [HttpPost("tables")]
-    public ActionResult PostTables([FromBody] TableEntity tableEntity)
+    public IActionResult PostTables([FromBody] TableEntity tableEntity)
     {
         _dbContext.TableEntities.Add(tableEntity);
         _dbContext.SaveChanges();
