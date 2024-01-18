@@ -2,8 +2,8 @@
 
 public class KitchenQueueEntity
 {
-    public string UUID = Guid.NewGuid().ToString();
-    public required string ProductUUID { get; set; }
+    public string? UUID { get; set; }
+    public required string ProductID { get; set; }
     public string? Note { get; set; }
-    public DateTime TimeAdded = DateTime.Now;
+    public long? Timestamp { get; set; }
 }
