@@ -1,10 +1,16 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { ZodiosHooks } from "@zodios/react";
+import { env } from "~/env";
 
 import { z } from "zod";
 
 export const KitchenQueueEntity = z
-  .object({ productUUID: z.string().nullable(), note: z.string().nullable() })
+  .object({
+    uuid: z.string().nullable(),
+    productID: z.string().nullable(),
+    note: z.string().nullable(),
+    timestamp: z.number().int().nullable(),
+  })
   .partial();
 export const uuid = z.string();
 export const ProductEntity = z
@@ -39,7 +45,7 @@ const endpoints = makeApi([
     path: "/kitchenQueue",
     alias: "getKitchenQueue",
     requestFormat: "json",
-    response: z.void(),
+    response: z.array(KitchenQueueEntity),
   },
   {
     method: "post",
@@ -67,7 +73,7 @@ const endpoints = makeApi([
         schema: uuid,
       },
     ],
-    response: z.void(),
+    response: KitchenQueueEntity,
   },
   {
     method: "delete",
@@ -176,7 +182,7 @@ const endpoints = makeApi([
   },
 ]);
 
-export const api = new Zodios(endpoints);
+export const api = new Zodios(env.NEXT_PUBLIC_SERVER_URL, endpoints);
 export const apiHooks = new ZodiosHooks("barman", api);
 
 export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
