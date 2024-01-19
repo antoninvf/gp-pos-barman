@@ -13,8 +13,18 @@ export const KitchenQueueEntity = z
   })
   .partial();
 export const uuid = z.string();
+export const CustomerEntity = z
+  .object({
+    uuid: z.string().nullable(),
+    ordered: z.array(z.string()).nullable(),
+    internalOrdered: z.string().nullable(),
+    tableID: z.string().nullable(),
+    creationTimestamp: z.number().int().nullable(),
+  })
+  .partial();
 export const ProductEntity = z
   .object({
+    id: z.string().nullable(),
     name: z.string().nullable(),
     category: z.string().nullable(),
     description: z.string().nullable(),
@@ -24,9 +34,9 @@ export const ProductEntity = z
   .partial();
 export const TableEntity = z
   .object({
-    id: z.number().int(),
+    id: z.number().int().nullable(),
     name: z.string().nullable(),
-    room: z.string().nullable(),
+    roomID: z.string().nullable(),
     positionX: z.number().int(),
     positionY: z.number().int(),
   })
@@ -35,11 +45,61 @@ export const TableEntity = z
 export const schemas = {
   KitchenQueueEntity,
   uuid,
+  CustomerEntity,
   ProductEntity,
   TableEntity,
 };
 
 const endpoints = makeApi([
+  {
+    method: "get",
+    path: "/customers",
+    alias: "getCustomers",
+    requestFormat: "json",
+    response: z.array(CustomerEntity),
+  },
+  {
+    method: "post",
+    path: "/customers",
+    alias: "postCustomers",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: CustomerEntity,
+      },
+    ],
+    response: z.void(),
+  },
+  {
+    method: "get",
+    path: "/customers/:uuid",
+    alias: "getCustomersUuid",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "uuid",
+        type: "Path",
+        schema: uuid,
+      },
+    ],
+    response: CustomerEntity,
+  },
+  {
+    method: "delete",
+    path: "/customers/:uuid",
+    alias: "deleteCustomersUuid",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "uuid",
+        type: "Path",
+        schema: uuid,
+      },
+    ],
+    response: z.void(),
+  },
   {
     method: "get",
     path: "/kitchenQueue",
@@ -90,6 +150,20 @@ const endpoints = makeApi([
     response: z.void(),
   },
   {
+    method: "get",
+    path: "/kitchenQueue/:uuid/customer",
+    alias: "getKitchenQueueUuidcustomer",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "uuid",
+        type: "Path",
+        schema: uuid,
+      },
+    ],
+    response: CustomerEntity,
+  },
+  {
     method: "delete",
     path: "/kitchenQueue/clear",
     alias: "deleteKitchenQueueclear",
@@ -108,14 +182,14 @@ const endpoints = makeApi([
         schema: uuid,
       },
     ],
-    response: z.void(),
+    response: ProductEntity,
   },
   {
     method: "get",
     path: "/products",
     alias: "getProducts",
     requestFormat: "json",
-    response: z.void(),
+    response: z.array(ProductEntity),
   },
   {
     method: "post",
@@ -132,13 +206,13 @@ const endpoints = makeApi([
     response: z.void(),
   },
   {
-    method: "get",
-    path: "/table/:uuid",
-    alias: "getTableUuid",
+    method: "delete",
+    path: "/products/:id",
+    alias: "deleteProductsId",
     requestFormat: "json",
     parameters: [
       {
-        name: "uuid",
+        name: "id",
         type: "Path",
         schema: uuid,
       },
@@ -146,11 +220,46 @@ const endpoints = makeApi([
     response: z.void(),
   },
   {
+    method: "delete",
+    path: "/products/clear",
+    alias: "deleteProductsclear",
+    requestFormat: "json",
+    response: z.void(),
+  },
+  {
+    method: "get",
+    path: "/table/:id",
+    alias: "getTableId",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "id",
+        type: "Path",
+        schema: uuid,
+      },
+    ],
+    response: TableEntity,
+  },
+  {
+    method: "get",
+    path: "/table/:id/customer",
+    alias: "getTableIdcustomer",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "id",
+        type: "Path",
+        schema: uuid,
+      },
+    ],
+    response: z.array(CustomerEntity),
+  },
+  {
     method: "get",
     path: "/tables",
     alias: "getTables",
     requestFormat: "json",
-    response: z.void(),
+    response: z.array(TableEntity),
   },
   {
     method: "post",
@@ -178,7 +287,7 @@ const endpoints = makeApi([
         schema: uuid,
       },
     ],
-    response: z.void(),
+    response: z.array(TableEntity),
   },
 ]);
 
