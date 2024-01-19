@@ -57,16 +57,18 @@ export const AddToKitchenQueue = () => {
 							</Grid.Col>
 						))}
 					</Grid>
-					<Flex justify={'right'} mt={'1rem'}>
+					<Flex justify={'right'} mt={'1rem'} gap={'xs'}>
 						<Button
 							type={'submit'}
-							variant={'light'}
+							variant={'filled'}
 							rightSection={<IconCirclePlus />}
 							loading={isLoading}
 						>
 							Add to kitchen queue
 						</Button>
-						<Button onClick={close}>close</Button>
+						<Button onClick={close} variant="outline">
+							Close
+						</Button>
 					</Flex>
 				</form>
 			</Modal>
