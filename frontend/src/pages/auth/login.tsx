@@ -1,19 +1,17 @@
 import { useRouter } from 'next/router';
 import { useForm } from '@mantine/form';
 import {
-	Badge,
 	Button,
+	Divider,
 	Flex,
 	PasswordInput,
 	TextInput,
 	Title,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { IconBottleFilled, IconChevronsRight } from '@tabler/icons-react';
-import getConfig from 'next/config';
+import { IconChevronsRight } from '@tabler/icons-react';
 import classes from '/src/styles/Login.module.css';
-
-const { publicRuntimeConfig } = getConfig();
+import BarmanLogo from '~components/BarmanLogo/BarmanLogo';
 
 export default function Login() {
 	const router = useRouter();
@@ -62,10 +60,8 @@ export default function Login() {
 					justify={'center'}
 					align={'center'}
 				>
-					<Flex align={'center'} ml={'-10rem'}>
-						<IconBottleFilled size={'10rem'} />
-						<Title size={'12rem'}>Barman</Title>
-					</Flex>
+					<BarmanLogo size={12} padding={1} />
+					<Divider w={'100%'} mb={'xl'} />
 					<Flex
 						className={classes.loginBox}
 						bg={'whitesmoke'}
