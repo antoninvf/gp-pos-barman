@@ -1,7 +1,13 @@
 import { showNotification } from '@mantine/notifications';
 import { apiHooks } from '~/api';
 
-export const useClearKitchenQueue = () => {
+interface IUseClearKitchenQueueProps {
+	afterSubmit: () => void;
+}
+
+export const useClearKitchenQueue = ({
+	afterSubmit,
+}: IUseClearKitchenQueueProps) => {
 	const { invalidate } = apiHooks.useGetKitchenQueue();
 
 	const { mutate, isLoading } = apiHooks.useDeleteKitchenQueueclear(
@@ -40,8 +46,13 @@ export const useClearKitchenQueue = () => {
 		},
 	);
 
+	const submit = async () => {
+		mutate(undefined);
+		afterSubmit();
+	};
+
 	return {
-		mutate,
+		submit,
 		isLoading,
 	};
 };
