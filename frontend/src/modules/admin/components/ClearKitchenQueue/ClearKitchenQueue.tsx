@@ -6,7 +6,9 @@ import { useClearKitchenQueue } from '~kitchenQueue/hooks';
 
 export const ClearKitchenQueue = () => {
 	const [opened, { open, close }] = useDisclosure(false);
-	const { mutate, isLoading } = useClearKitchenQueue();
+	const { submit, isLoading } = useClearKitchenQueue({
+		afterSubmit: close,
+	});
 
 	const handleOpen = () => {
 		open();
@@ -25,11 +27,12 @@ export const ClearKitchenQueue = () => {
 				title="Are you sure you want to clear the kitchen queue?"
 				centered
 			>
-				<Flex justify={'right'} mt={'1rem'}>
+				<Flex justify={'right'} mt={'1rem'} gap={'xs'}>
 					<Button
-						onClick={() => mutate(undefined)}
-						variant={'light'}
-						rightSection={<IconCirclePlus />}
+						onClick={() => submit()}
+						variant={'filled'}
+						color={'red'}
+						rightSection={<IconTrash />}
 						loading={isLoading}
 					>
 						Clear
