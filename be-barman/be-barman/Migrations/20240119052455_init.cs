@@ -15,6 +15,24 @@ namespace be_barman.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "CustomerEntities",
+                columns: table => new
+                {
+                    UUID = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    InternalOrdered = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TableID = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationTimestamp = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerEntities", x => x.UUID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "KitchenQueueEntities",
                 columns: table => new
                 {
@@ -36,7 +54,7 @@ namespace be_barman.Migrations
                 name: "ProductEntities",
                 columns: table => new
                 {
-                    UUID = table.Column<string>(type: "varchar(255)", nullable: false)
+                    ID = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -50,7 +68,7 @@ namespace be_barman.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductEntities", x => x.UUID);
+                    table.PrimaryKey("PK_ProductEntities", x => x.ID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -62,7 +80,7 @@ namespace be_barman.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Room = table.Column<string>(type: "longtext", nullable: false)
+                    RoomID = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PositionX = table.Column<int>(type: "int", nullable: false),
                     PositionY = table.Column<int>(type: "int", nullable: false)
@@ -77,6 +95,9 @@ namespace be_barman.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CustomerEntities");
+
             migrationBuilder.DropTable(
                 name: "KitchenQueueEntities");
 

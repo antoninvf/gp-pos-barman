@@ -19,10 +19,30 @@ namespace be_barman.Migrations
                 .HasAnnotation("ProductVersion", "7.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("be_barman.Entities.CustomerEntity", b =>
+                {
+                    b.Property<string>("UUID")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<long?>("CreationTimestamp")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("InternalOrdered")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TableID")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UUID");
+
+                    b.ToTable("CustomerEntities");
+                });
+
             modelBuilder.Entity("be_barman.Entities.KitchenQueueEntity", b =>
                 {
                     b.Property<string>("UUID")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Note")
@@ -44,8 +64,7 @@ namespace be_barman.Migrations
 
             modelBuilder.Entity("be_barman.Entities.ProductEntity", b =>
                 {
-                    b.Property<string>("UUID")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("ID")
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Category")
@@ -64,14 +83,14 @@ namespace be_barman.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.HasKey("UUID");
+                    b.HasKey("ID");
 
                     b.ToTable("ProductEntities");
                 });
 
             modelBuilder.Entity("be_barman.Entities.TableEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int?>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -85,7 +104,7 @@ namespace be_barman.Migrations
                     b.Property<int>("PositionY")
                         .HasColumnType("int");
 
-                    b.Property<string>("Room")
+                    b.Property<string>("RoomID")
                         .IsRequired()
                         .HasColumnType("longtext");
 
