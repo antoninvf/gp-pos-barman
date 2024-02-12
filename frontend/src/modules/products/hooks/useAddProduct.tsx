@@ -1,16 +1,14 @@
 import { showNotification } from '@mantine/notifications';
 import { apiHooks } from '~/api';
 
-interface IUseAddToKitchenQueueProps {
+interface IUseAddProductProps {
 	afterSubmit: () => void;
 }
 
-export const useAddToKitchenQueue = ({
-	afterSubmit,
-}: IUseAddToKitchenQueueProps) => {
-	const { invalidate } = apiHooks.useGetKitchenQueue();
+export const useAddProduct = ({ afterSubmit }: IUseAddProductProps) => {
+	const { invalidate } = apiHooks.useGetProducts();
 
-	const { mutate, isLoading } = apiHooks.usePostKitchenQueue(
+	const { mutate, isLoading } = apiHooks.usePostProducts(
 		{},
 		{
 			onError: async (err) => {
@@ -35,7 +33,14 @@ export const useAddToKitchenQueue = ({
 		},
 	);
 
-	const submit = async (values: { productID: string; note: string }) => {
+	const submit = async (values: {
+		id: string;
+		name: string;
+		category: string;
+		description?: string;
+		imageURL?: string;
+		price: number;
+	}) => {
 		mutate(values);
 		afterSubmit();
 	};
