@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Migration -&gt; Clear DB -&gt; Update DB" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="cd be-barman &amp;&amp; dotnet ef migrations add init &amp;&amp; dotnet ef database drop -f &amp;&amp; dotnet ef database update" />
+    <option name="SCRIPT_TEXT" value="cd be-barman &amp;&amp; dotnet ef migrations add init &amp;&amp; dotnet ef database drop -f &amp;&amp; dotnet ef database update &amp;&amp; exit" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
