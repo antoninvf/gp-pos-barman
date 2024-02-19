@@ -206,7 +206,7 @@ const endpoints = makeApi([
       {
         name: "id",
         type: "Path",
-        schema: id__2,
+        schema: id,
       },
     ],
     response: z.void(),
@@ -289,6 +289,20 @@ const endpoints = makeApi([
     response: z.void(),
   },
   {
+    method: "get",
+    path: "/product/:id",
+    alias: "getProductId",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "id",
+        type: "Path",
+        schema: id__2,
+      },
+    ],
+    response: ProductEntity,
+  },
+  {
     method: "delete",
     path: "/product/:id",
     alias: "deleteProductId",
@@ -301,20 +315,6 @@ const endpoints = makeApi([
       },
     ],
     response: z.void(),
-  },
-  {
-    method: "get",
-    path: "/product/:uuid",
-    alias: "getProductUuid",
-    requestFormat: "json",
-    parameters: [
-      {
-        name: "uuid",
-        type: "Path",
-        schema: id__2,
-      },
-    ],
-    response: ProductEntity,
   },
   {
     method: "get",
@@ -360,7 +360,7 @@ const endpoints = makeApi([
       {
         name: "id",
         type: "Path",
-        schema: id__2,
+        schema: id,
       },
     ],
     response: TableEntity,
