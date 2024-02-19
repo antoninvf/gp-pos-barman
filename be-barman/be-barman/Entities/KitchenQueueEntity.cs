@@ -2,8 +2,7 @@
 
 public class KitchenQueueEntity
 {
-    public string? UUID { get; set; }
-    public required string ProductID { get; set; }
-    public string? Note { get; set; }
-    public long? Timestamp { get; set; }
+    public int ID { get; set; }
+    public required OrderEntity Order { get; set; }
+    public required long Timestamp { get; set; }
 }
