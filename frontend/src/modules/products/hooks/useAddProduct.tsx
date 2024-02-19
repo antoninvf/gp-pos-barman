@@ -1,5 +1,6 @@
 import { showNotification } from '@mantine/notifications';
-import { apiHooks } from '~/api';
+import { apiHooks, schemas } from '~/api';
+import { type z } from 'zod';
 
 interface IUseAddProductProps {
 	afterSubmit: () => void;
@@ -8,7 +9,7 @@ interface IUseAddProductProps {
 export const useAddProduct = ({ afterSubmit }: IUseAddProductProps) => {
 	const { invalidate } = apiHooks.useGetProducts();
 
-	const { mutate, isLoading } = apiHooks.usePostProducts(
+	const { mutate, isLoading } = apiHooks.usePostProduct(
 		{},
 		{
 			onError: async (err) => {
@@ -33,14 +34,7 @@ export const useAddProduct = ({ afterSubmit }: IUseAddProductProps) => {
 		},
 	);
 
-	const submit = async (values: {
-		id: string;
-		name: string;
-		category: string;
-		description?: string;
-		imageURL?: string;
-		price: number;
-	}) => {
+	const submit = async (values: z.infer<typeof schemas.ProductModel>) => {
 		mutate(values);
 		afterSubmit();
 	};
