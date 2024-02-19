@@ -1,15 +1,23 @@
 import { Code, Flex, Text, Tabs, Title, rem, Box, Card } from '@mantine/core';
 import { IconExclamationCircle } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { apiHooks } from '~/api';
 import { ProductItem } from '~products';
+import { TableCard } from '../TableCard';
 
 interface IRoomTabsProps {}
 
 export const RoomTabs = (props: IRoomTabsProps) => {
-	const [activeTab, setActiveTab] = useState<string | null>('first');
 	const { data: roomData } = apiHooks.useGetTablesrooms();
 	const { data: tableData } = apiHooks.useGetTables();
+
+	const [activeTab, setActiveTab] = useState<string | null>(
+		roomData?.[0] || null,
+	);
+
+	useEffect(() => {
+		setActiveTab(roomData?.[0] || null);
+	}, [roomData]);
 
 	if (!roomData?.length)
 		return (
@@ -47,9 +55,7 @@ export const RoomTabs = (props: IRoomTabsProps) => {
 							{tableData
 								?.filter((table) => table.room === room)
 								.map((table) => (
-									<Card withBorder key={table.id}>
-										{table.name}
-									</Card>
+									<TableCard key={table.id} tableID={table.id} />
 								))}
 						</Flex>
 					</Tabs.Panel>
