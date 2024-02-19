@@ -14,22 +14,25 @@ public class ApplicationDbContext : DbContext
     public DbSet<ProductEntity> ProductEntities { get; set; }
     public DbSet<TableEntity> TableEntities { get; set; }
     public DbSet<CustomerEntity> CustomerEntities { get; set; }
+    public DbSet<OrderEntity> OrderEntities { get; set; }
+    public DbSet<ConfigurationEntity> ConfigurationEntities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         // set up primary keys
-        modelBuilder.Entity<KitchenQueueEntity>().HasKey(x => x.UUID);
+        modelBuilder.Entity<KitchenQueueEntity>().HasKey(x => x.ID);
         modelBuilder.Entity<ProductEntity>().HasKey(x => x.ID);
         modelBuilder.Entity<TableEntity>().HasKey(x => x.ID);
         modelBuilder.Entity<CustomerEntity>().HasKey(x => x.UUID);
+        modelBuilder.Entity<OrderEntity>().HasKey(x => x.ID);
+        modelBuilder.Entity<ConfigurationEntity>().HasKey(x => x.ID);
         
         // set up auto-incrementing primary keys
         //modelBuilder.Entity<KitchenQueueEntity>().Property(x => x.UUID).ValueGeneratedOnAdd();
         modelBuilder.Entity<TableEntity>().Property(x => x.ID).ValueGeneratedOnAdd();
-        
-        // set time added to current timestamp
-        modelBuilder.Entity<KitchenQueueEntity>().Property(x => x.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        modelBuilder.Entity<OrderEntity>().Property(x => x.ID).ValueGeneratedOnAdd();
+        modelBuilder.Entity<ConfigurationEntity>().Property(x => x.ID).ValueGeneratedOnAdd();
     }
 }
