@@ -2,24 +2,20 @@ import { showNotification } from '@mantine/notifications';
 import { apiHooks } from '~/api';
 
 interface UseRemoveFromKitchenQueueProps {
-	uuid: string;
-	name?: string;
+	id: string;
 }
 
 export const useRemoveFromKitchenQueue = ({
-	uuid,
-	name,
+	id,
 }: UseRemoveFromKitchenQueueProps) => {
 	const { invalidate } = apiHooks.useGetKitchenQueue();
 
-	if (!name) name = '';
-
-	const { mutate, isLoading } = apiHooks.useDeleteKitchenQueueUuid(
-		{ params: { uuid } },
+	const { mutate, isLoading } = apiHooks.useDeleteKitchenQueueItemId(
+		{ params: { id } },
 		{
 			onMutate: async () => {
 				showNotification({
-					title: `Removing ${name} from kitchen queue`,
+					title: `Removing from kitchen queue`,
 					message: '',
 					color: 'blue',
 					autoClose: 1000,
@@ -41,7 +37,7 @@ export const useRemoveFromKitchenQueue = ({
 			onSuccess: async () => {
 				showNotification({
 					title: 'Success',
-					message: `Successfully removed ${name} from kitchen queue`,
+					message: `Successfully removed from kitchen queue`,
 					color: 'green',
 					autoClose: 1000,
 				});
