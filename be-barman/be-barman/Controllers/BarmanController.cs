@@ -55,7 +55,7 @@ public class BarmanController : ControllerBase
     }
 
     [HttpDelete("kitchenQueueItem/{id}")]
-    public IActionResult DeleteKitchenQueueItem(string id)
+    public IActionResult DeleteKitchenQueueItem(int id)
     {
         var kitchenQueueEntity = _dbContext.KitchenQueueEntities.Find(id);
         if (kitchenQueueEntity == null) return NotFound("Kitchen queue item not found");
@@ -79,10 +79,10 @@ public class BarmanController : ControllerBase
         return new ActionResult<IEnumerable<ProductEntity>>(_dbContext.ProductEntities.OrderBy(x => x.Category).ToList());
     }
 
-    [HttpGet("product/{uuid}")]
-    public ActionResult<ProductEntity?> GetProduct(string uuid)
+    [HttpGet("product/{id}")]
+    public ActionResult<ProductEntity?> GetProduct(string id)
     {
-        return new ActionResult<ProductEntity?>(_dbContext.ProductEntities.Find(uuid));
+        return new ActionResult<ProductEntity?>(_dbContext.ProductEntities.Find(id));
     }
 
     [HttpPost("product")]
@@ -142,7 +142,7 @@ public class BarmanController : ControllerBase
     }
 
     [HttpGet("table/{id}")]
-    public ActionResult<TableEntity?> GetTable(string id)
+    public ActionResult<TableEntity?> GetTable(int id)
     {
         return new ActionResult<TableEntity?>(_dbContext.TableEntities.Find(id));
     }
