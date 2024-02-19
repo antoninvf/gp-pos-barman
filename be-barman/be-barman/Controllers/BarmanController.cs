@@ -1,8 +1,9 @@
 using be_barman.Data;
 using be_barman.Entities;
+using be_barman.Models;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace be_barman.Controllers;
 
@@ -11,6 +12,7 @@ namespace be_barman.Controllers;
 [Route("")]
 public class BarmanController : ControllerBase
 {
+    // ReSharper disable once NotAccessedField.Local
     private readonly ILogger<BarmanController> _logger;
     private readonly ApplicationDbContext _dbContext;
 
@@ -24,37 +26,39 @@ public class BarmanController : ControllerBase
     [HttpGet("kitchenQueue")]
     public ActionResult<IEnumerable<KitchenQueueEntity>> GetKitchenQueue()
     {
-        return new ActionResult<IEnumerable<KitchenQueueEntity>>(_dbContext.KitchenQueueEntities.OrderByDescending(x => x.Timestamp).ToList());
+        return new ActionResult<IEnumerable<KitchenQueueEntity>>(_dbContext.KitchenQueueEntities
+            .Include(x => x.Order)
+            .Include(x => x.Order.Customer)
+            .Include(x => x.Order.Customer.Table)
+            .Include(x => x.Order.Product)
+            .OrderByDescending(x => x.Timestamp).ToList());
     }
 
-    [HttpGet("kitchenQueue/{uuid}")]
-    public ActionResult<KitchenQueueEntity?> GetKitchenQueueItem(string uuid)
+    [HttpGet("kitchenQueueItem/{id}")]
+    public ActionResult<KitchenQueueEntity> GetKitchenQueueItem(int id)
     {
-        return new ActionResult<KitchenQueueEntity?>(_dbContext.KitchenQueueEntities.Find(uuid));
+        var kq = _dbContext.KitchenQueueEntities.Find(id);
+        if (kq == null) return NotFound("Kitchen queue item not found");
+        return new ActionResult<KitchenQueueEntity>(kq);
     }
 
-    [HttpGet("kitchenQueue/{uuid}/customer")]
-    public ActionResult<CustomerEntity?> GetKitchenQueueItemCustomer(string uuid)
+    [HttpGet("kitchenQueueItem/{id}/customer")]
+    public ActionResult<CustomerEntity> GetKitchenQueueItemCustomer(int id)
     {
-        return new ActionResult<CustomerEntity?>(_dbContext.CustomerEntities.FirstOrDefault(x => x.Ordered.Contains(uuid)));
+        var kq = _dbContext.KitchenQueueEntities
+            .Include(x => x.Order.Customer)
+            .Include(x => x.Order.Customer.Table)
+            .Include(x => x.Order.Product)
+            .FirstOrDefault(x => x.ID == id);
+        if (kq == null) return NotFound("Kitchen queue item not found");
+        return new ActionResult<CustomerEntity>(kq.Order.Customer);
     }
 
-    [HttpPost("kitchenQueue")]
-    public IActionResult PostKitchenQueue([FromBody] KitchenQueueEntity kitchenQueueEntity)
+    [HttpDelete("kitchenQueueItem/{id}")]
+    public IActionResult DeleteKitchenQueueItem(string id)
     {
-        kitchenQueueEntity.UUID = Guid.NewGuid().ToString();
-        kitchenQueueEntity.Timestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds();
-        if (kitchenQueueEntity.ProductID == "") return BadRequest();
-        _dbContext.KitchenQueueEntities.Add(kitchenQueueEntity);
-        _dbContext.SaveChanges();
-        return Ok();
-    }
-
-    [HttpDelete("kitchenQueue/{uuid}")]
-    public IActionResult DeleteKitchenQueue(string uuid)
-    {
-        var kitchenQueueEntity = _dbContext.KitchenQueueEntities.Find(uuid);
-        if (kitchenQueueEntity == null) return NotFound();
+        var kitchenQueueEntity = _dbContext.KitchenQueueEntities.Find(id);
+        if (kitchenQueueEntity == null) return NotFound("Kitchen queue item not found");
         _dbContext.KitchenQueueEntities.Remove(kitchenQueueEntity);
         _dbContext.SaveChanges();
         return Ok();
@@ -81,24 +85,34 @@ public class BarmanController : ControllerBase
         return new ActionResult<ProductEntity?>(_dbContext.ProductEntities.Find(uuid));
     }
 
-    [HttpPost("products")]
-    public IActionResult PostProduct([FromBody] ProductEntity productEntity)
+    [HttpPost("product")]
+    public IActionResult PostProduct([FromBody] ProductModel productModel)
     {
-        // ID should not have spaces and should have minecraft-like IDs, like chicken_soup or steak
-        if (productEntity.ID.Trim() == "") return BadRequest();
-        if (productEntity.ID.Any(char.IsWhiteSpace)) return BadRequest();
-        if (productEntity.Name.Trim() == "") return BadRequest();
+        if (productModel.ProductID.Trim() == "") return BadRequest("Product ID cannot be empty");
+        if (productModel.ProductID.Any(char.IsWhiteSpace)) return BadRequest("Product ID cannot contain spaces");
+        if (productModel.Name.Trim() == "") return BadRequest("Product name cannot be empty");
+        if (productModel.Category.Trim() == "") return BadRequest("Product category cannot be empty");
 
+        var productEntity = new ProductEntity
+        {
+            ID = productModel.ProductID,
+            Name = productModel.Name,
+            Category = productModel.Category,
+            Description = productModel.Description,
+            ImageURL = productModel.ImageURL,
+            Price = productModel.Price,
+            SendToKitchenQueue = productModel.SendToKitchenQueue
+        };
         _dbContext.ProductEntities.Add(productEntity);
         _dbContext.SaveChanges();
         return Ok();
     }
 
-    [HttpDelete("products/{id}")]
+    [HttpDelete("product/{id}")]
     public IActionResult DeleteProduct(string id)
     {
         var productEntity = _dbContext.ProductEntities.Find(id);
-        if (productEntity == null) return NotFound();
+        if (productEntity == null) return NotFound("Product not found");
         _dbContext.ProductEntities.Remove(productEntity);
         _dbContext.SaveChanges();
         return Ok();
@@ -112,11 +126,19 @@ public class BarmanController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("products/categories")]
+    public ActionResult<IEnumerable<string>> GetProductCategories()
+    {
+        if (!_dbContext.ProductEntities.Any()) return NotFound("No products found");
+        var categories = _dbContext.ProductEntities.Select(x => x.Category).Distinct().ToList();
+        return new ActionResult<IEnumerable<string>>(categories);
+    }
+
     //? Tables
     [HttpGet("tables")]
     public ActionResult<IEnumerable<TableEntity>> GetTables()
     {
-        return new ActionResult<IEnumerable<TableEntity>>(_dbContext.TableEntities.OrderBy(x => x.RoomID).ToList());
+        return new ActionResult<IEnumerable<TableEntity>>(_dbContext.TableEntities.OrderBy(x => x.Room).ToList());
     }
 
     [HttpGet("table/{id}")]
@@ -126,24 +148,40 @@ public class BarmanController : ControllerBase
     }
 
     [HttpGet("table/{id}/customer")]
-    public ActionResult<IEnumerable<CustomerEntity?>> GetCustomerByTableId(string id)
+    public ActionResult<IEnumerable<CustomerEntity?>> GetCustomerByTableId(int id)
     {
-        return new ActionResult<IEnumerable<CustomerEntity?>>(_dbContext.CustomerEntities.Where(x => x.TableID.ToLower().Equals(id.ToLower())).ToList());
+        return new ActionResult<IEnumerable<CustomerEntity?>>(_dbContext.CustomerEntities
+            .Include(x => x.Table)
+            .Where(x => x.Table.ID == id)
+            .ToList());
     }
 
     [HttpGet("tables/{room}")]
     public ActionResult<IEnumerable<TableEntity>> GetTablesByRoom(string room)
     {
-        return new ActionResult<IEnumerable<TableEntity>>(_dbContext.TableEntities.Where(x => x.RoomID.ToLower().Equals(room.ToLower())).ToList());
+        return new ActionResult<IEnumerable<TableEntity>>(_dbContext.TableEntities
+            .Where(x => x.Room.ToLower().Equals(room.ToLower()))
+            .ToList());
     }
 
-    [HttpPost("tables")]
-    public IActionResult PostTables([FromBody] TableEntity tableEntity)
+    [HttpGet("tables/rooms")]
+    public ActionResult<IEnumerable<string>> GetRooms()
     {
-        // Room IDs shouldn't have spaces
-        if (tableEntity.RoomID.Trim() == "") return BadRequest();
-        if (tableEntity.RoomID.Any(char.IsWhiteSpace)) return BadRequest();
+        if (!_dbContext.TableEntities.Any()) return NotFound("No tables found");
+        var rooms = _dbContext.TableEntities.Select(x => x.Room).Distinct().ToList();
+        return new ActionResult<IEnumerable<string>>(rooms);
+    }
 
+    [HttpPost("table")]
+    public IActionResult PostTable([FromBody] TableModel tableModel)
+    {
+        if (tableModel.Room.Trim() == "") return BadRequest("Room name cannot be empty");
+
+        var tableEntity = new TableEntity
+        {
+            Name = tableModel.Room[0].ToString().ToUpper() + (_dbContext.TableEntities.Count(x => x.Room.ToLower().Equals(tableModel.Room.ToLower())) + 1),
+            Room = tableModel.Room.ToLower()
+        };
         _dbContext.TableEntities.Add(tableEntity);
         _dbContext.SaveChanges();
         return Ok();
@@ -153,33 +191,136 @@ public class BarmanController : ControllerBase
     [HttpGet("customers")]
     public ActionResult<IEnumerable<CustomerEntity>> GetCustomers()
     {
-        return new ActionResult<IEnumerable<CustomerEntity>>(_dbContext.CustomerEntities.OrderByDescending(x => x.CreationTimestamp).ToList());
+        return new ActionResult<IEnumerable<CustomerEntity>>(_dbContext.CustomerEntities
+            .Include(x => x.Table)
+            .OrderBy(x => x.CreationTimestamp).ToList());
     }
 
-    [HttpGet("customers/{uuid}")]
+    [HttpGet("customer/{uuid}")]
     public ActionResult<CustomerEntity?> GetCustomer(string uuid)
     {
-        return new ActionResult<CustomerEntity?>(_dbContext.CustomerEntities.Find(uuid));
+        return new ActionResult<CustomerEntity?>(_dbContext.CustomerEntities
+            .Include(x => x.Table)
+            .FirstOrDefault(x => x.UUID == uuid));
     }
 
-    [HttpPost("customers")]
-    public IActionResult PostCustomer([FromBody] CustomerEntity customerEntity)
+    [HttpPost("customer")]
+    public IActionResult PostCustomer([FromBody] CustomerModel customerModel)
     {
-        customerEntity.UUID = Guid.NewGuid().ToString();
-        customerEntity.CreationTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds();
-        if (customerEntity.TableID == "") return BadRequest();
+        var table = _dbContext.TableEntities.Find(customerModel.TableID);
+        if (table == null) return NotFound("Table not found");
+
+        var customerEntity = new CustomerEntity
+        {
+            UUID = Guid.NewGuid().ToString(),
+            Table = table,
+            CreationTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds()
+        };
 
         _dbContext.CustomerEntities.Add(customerEntity);
         _dbContext.SaveChanges();
         return Ok();
     }
 
-    [HttpDelete("customers/{uuid}")]
+    [HttpDelete("customer/{uuid}")]
     public IActionResult DeleteCustomer(string uuid)
     {
         var customerEntity = _dbContext.CustomerEntities.Find(uuid);
-        if (customerEntity == null) return NotFound();
+        if (customerEntity == null) return NotFound("Customer not found");
         _dbContext.CustomerEntities.Remove(customerEntity);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+
+    [HttpDelete("customers/clear")]
+    public IActionResult ClearCustomers()
+    {
+        _dbContext.CustomerEntities.RemoveRange(_dbContext.CustomerEntities);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+
+    [HttpGet("customer/{uuid}/orders")]
+    public ActionResult<IEnumerable<OrderEntity>> GetCustomerOrders(string uuid)
+    {
+        return new ActionResult<IEnumerable<OrderEntity>>(_dbContext.OrderEntities
+            .Include(x => x.Product)
+            .Include(x => x.Customer)
+            .Where(x => x.Customer.UUID == uuid)
+            .OrderByDescending(x => x.Timestamp)
+            .ToList());
+    }
+
+    [HttpGet("customer/{uuid}/orders/total")]
+    // Counts the total the customer has to pay
+    public ActionResult<int> GetCustomerOrdersTotal(string uuid)
+    {
+        var orders = _dbContext.OrderEntities
+            .Include(x => x.Product)
+            .Where(x => x.Customer.UUID == uuid)
+            .ToList();
+        return new ActionResult<int>(orders.Sum(x => x.Product.Price));
+    }
+
+    //? Orders
+    [HttpGet("orders")]
+    public ActionResult<IEnumerable<OrderEntity>> GetOrders()
+    {
+        return new ActionResult<IEnumerable<OrderEntity>>(_dbContext.OrderEntities
+            .Include(x => x.Customer)
+            .Include(x => x.Product)
+            .OrderByDescending(x => x.Timestamp)
+            .ToList());
+    }
+
+    [HttpGet("order/{id}")]
+    public ActionResult<OrderEntity?> GetOrder(int id)
+    {
+        return new ActionResult<OrderEntity?>(_dbContext.OrderEntities
+            .Include(x => x.Customer)
+            .Include(x => x.Product)
+            .FirstOrDefault(x => x.ID == id));
+    }
+
+    [HttpGet("order/{id}/customer")]
+    public ActionResult<CustomerEntity?> GetOrderCustomer(int id)
+    {
+        var order = _dbContext.OrderEntities
+            .Include(x => x.Customer)
+            .FirstOrDefault(x => x.ID == id);
+        if (order == null) return NotFound("Order not found");
+        return new ActionResult<CustomerEntity?>(order.Customer);
+    }
+
+    [HttpPost("order")]
+    public IActionResult PostOrder([FromBody] OrderModel orderModel)
+    {
+        var customer = _dbContext.CustomerEntities.Find(orderModel.CustomerUUID);
+        if (customer == null) return NotFound("Customer not found");
+        var product = _dbContext.ProductEntities.Find(orderModel.ProductID);
+        if (product == null) return NotFound("Product not found");
+
+        var orderEntity = new OrderEntity
+        {
+            Customer = customer,
+            Product = product,
+            Quantity = orderModel.Quantity,
+            Timestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds(),
+            Notes = orderModel.Notes
+        };
+
+        // When order gets posted, it gets added to orders AND kitchen queue, but only if the order's product has SendToKitchenQueue set to true
+        if (product.SendToKitchenQueue)
+        {
+            var kitchenQueueEntity = new KitchenQueueEntity
+            {
+                Order = orderEntity,
+                Timestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds()
+            };
+            _dbContext.KitchenQueueEntities.Add(kitchenQueueEntity);
+        }
+
+        _dbContext.OrderEntities.Add(orderEntity);
         _dbContext.SaveChanges();
         return Ok();
     }
