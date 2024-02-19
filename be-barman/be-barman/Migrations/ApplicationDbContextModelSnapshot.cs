@@ -19,6 +19,25 @@ namespace be_barman.Migrations
                 .HasAnnotation("ProductVersion", "7.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("be_barman.Entities.ConfigurationEntity", b =>
+                {
+                    b.Property<int?>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("SettingName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ConfigurationEntities");
+                });
+
             modelBuilder.Entity("be_barman.Entities.CustomerEntity", b =>
                 {
                     b.Property<string>("UUID")
@@ -27,39 +46,64 @@ namespace be_barman.Migrations
                     b.Property<long?>("CreationTimestamp")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("InternalOrdered")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("TableID")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("TableID")
+                        .HasColumnType("int");
 
                     b.HasKey("UUID");
+
+                    b.HasIndex("TableID");
 
                     b.ToTable("CustomerEntities");
                 });
 
             modelBuilder.Entity("be_barman.Entities.KitchenQueueEntity", b =>
                 {
-                    b.Property<string>("UUID")
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderID")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Timestamp")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OrderID");
+
+                    b.ToTable("KitchenQueueEntities");
+                });
+
+            modelBuilder.Entity("be_barman.Entities.OrderEntity", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomerUUID")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Note")
+                    b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
                     b.Property<string>("ProductID")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<long?>("Timestamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
-                    b.HasKey("UUID");
+                    b.Property<long>("Timestamp")
+                        .HasColumnType("bigint");
 
-                    b.ToTable("KitchenQueueEntities");
+                    b.HasKey("ID");
+
+                    b.HasIndex("CustomerUUID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("OrderEntities");
                 });
 
             modelBuilder.Entity("be_barman.Entities.ProductEntity", b =>
@@ -68,6 +112,7 @@ namespace be_barman.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Category")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Description")
@@ -82,6 +127,9 @@ namespace be_barman.Migrations
 
                     b.Property<int>("Price")
                         .HasColumnType("int");
+
+                    b.Property<bool>("SendToKitchenQueue")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("ID");
 
@@ -98,19 +146,52 @@ namespace be_barman.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PositionX")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PositionY")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RoomID")
+                    b.Property<string>("Room")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("ID");
 
                     b.ToTable("TableEntities");
+                });
+
+            modelBuilder.Entity("be_barman.Entities.CustomerEntity", b =>
+                {
+                    b.HasOne("be_barman.Entities.TableEntity", "Table")
+                        .WithMany()
+                        .HasForeignKey("TableID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Table");
+                });
+
+            modelBuilder.Entity("be_barman.Entities.KitchenQueueEntity", b =>
+                {
+                    b.HasOne("be_barman.Entities.OrderEntity", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("be_barman.Entities.OrderEntity", b =>
+                {
+                    b.HasOne("be_barman.Entities.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerUUID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("be_barman.Entities.ProductEntity", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }
