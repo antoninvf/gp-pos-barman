@@ -1,48 +1,49 @@
 import { ActionIcon, Badge, Card, Flex, Text } from '@mantine/core';
-import { IconCheckbox, IconExclamationCircle } from '@tabler/icons-react';
+import { IconCheckbox } from '@tabler/icons-react';
 import moment from 'moment';
-import { apiHooks } from '~api';
+import { apiHooks, schemas } from '~api';
 import { useRemoveFromKitchenQueue } from '~kitchenQueue/hooks';
+import { type z } from 'zod';
 
 interface IKitchenQueueProps {
-	uuid?: string | null;
-	productID?: string | null;
-	note?: string | null;
+	id?: number;
+	order?: z.infer<typeof schemas.OrderEntity>;
 	timestamp: number;
 }
 
 export const KitchenQueueItem = ({ ...props }: IKitchenQueueProps) => {
-	if (!props.uuid || !props.productID) return null;
-
-	const { data: product } = apiHooks.useGetProductUuid({
-		params: { uuid: props.productID },
-	});
-
 	const { mutate, isLoading } = useRemoveFromKitchenQueue({
-		uuid: props.uuid,
-		name: product?.name ? product?.name : props.productID,
+		id: props.id?.toString() || '',
 	});
 
 	return (
 		<Card shadow="sm" padding="lg" radius="sm" withBorder>
 			<Flex justify="space-between" align={'start'} gap={'6rem'}>
 				<Text fw={600} size="xl">
-					{product?.name ? product?.name : props.productID}
+					{props.order?.product?.name
+						? props.order.product?.name
+						: props.order?.product?.id}
 				</Text>
 				<Flex direction={'column'} gap={'0.1rem'}>
-					{!product?.name && <Badge color="#FF0000">Product error</Badge>}
+					{!props.order?.product?.name && (
+						<Badge color="#FF0000">Product error</Badge>
+					)}
 					{<Badge color="pink">{moment(props.timestamp).fromNow()}</Badge>}
 				</Flex>
 			</Flex>
 			<Flex justify="space-between" align={'end'} gap={'6rem'}>
 				<Flex direction={'column'}>
-					{props.note && (
+					{(props.order?.notes && (
 						<>
 							<Text size="lg" mt={'sm'} c="dimmed">
 								Note:
 							</Text>
-							<Text size="lg">{props.note}</Text>
+							<Text size="lg">{props.order.notes}</Text>
 						</>
+					)) || (
+						<Text size="lg" mt={'sm'} c="dimmed">
+							No notes
+						</Text>
 					)}
 				</Flex>
 				<ActionIcon

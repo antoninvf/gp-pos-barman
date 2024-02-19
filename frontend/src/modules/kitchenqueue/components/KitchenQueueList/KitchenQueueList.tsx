@@ -24,14 +24,13 @@ export const KitchenQueueList = (props: IKitchenQueueProps) => {
 
 	return (
 		<Flex wrap="wrap" gap={'sm'}>
-			{data?.map(({ uuid, productID, note, timestamp }) => {
+			{data?.map(({ id, order, timestamp }) => {
 				if (!timestamp) return null;
 				return (
 					<KitchenQueueItem
-						key={uuid}
-						uuid={uuid}
-						productID={productID}
-						note={note}
+						key={id}
+						id={id}
+						order={order}
 						timestamp={timestamp}
 					/>
 				);
