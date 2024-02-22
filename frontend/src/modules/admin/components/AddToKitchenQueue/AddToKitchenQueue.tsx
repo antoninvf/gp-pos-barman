@@ -2,11 +2,11 @@ import { Button, Flex, Grid, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCirclePlus } from '@tabler/icons-react';
-import { useAddToKitchenQueue } from '~kitchenQueue/hooks';
+import { useCreateOrder } from '~orders';
 
 export const AddToKitchenQueue = () => {
 	const [opened, { open, close }] = useDisclosure(false);
-	const { submit, isLoading } = useAddToKitchenQueue({
+	const { submit, isLoading } = useCreateOrder({
 		afterSubmit: close,
 	});
 
