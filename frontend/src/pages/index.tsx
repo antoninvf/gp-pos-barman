@@ -7,8 +7,8 @@ import { RoomTabs } from '~tables';
 export default function Dashboard() {
 	return (
 		<Flex>
-			<RoomTabs />
 			<Navigation />
+			<RoomTabs />
 		</Flex>
 	);
 }
