@@ -37,6 +37,7 @@
 		"embla-carousel-react": "^8.0.0-rc19",
 		"moment": "^2.30.1",
 		"next": "14.0.4",
+		"next-auth": "^4.24.6",
 		"openapi-zod-client": "^1.15.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0"
