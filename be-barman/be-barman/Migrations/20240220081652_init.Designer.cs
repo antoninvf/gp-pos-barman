@@ -11,7 +11,7 @@ using be_barman.Data;
 namespace be_barman.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240219155429_init")]
+    [Migration("20240220081652_init")]
     partial class init
     {
         /// <inheritdoc />
