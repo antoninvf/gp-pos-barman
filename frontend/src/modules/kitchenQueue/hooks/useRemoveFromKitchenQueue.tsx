@@ -2,7 +2,7 @@ import { showNotification } from '@mantine/notifications';
 import { apiHooks } from '~/api';
 
 interface UseRemoveFromKitchenQueueProps {
-	id: string;
+	id: number;
 }
 
 export const useRemoveFromKitchenQueue = ({
