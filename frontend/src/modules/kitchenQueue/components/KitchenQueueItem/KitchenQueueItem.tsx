@@ -13,7 +13,7 @@ interface IKitchenQueueProps {
 
 export const KitchenQueueItem = ({ ...props }: IKitchenQueueProps) => {
 	const { mutate, isLoading } = useRemoveFromKitchenQueue({
-		id: props.id?.toString() || '',
+		id: props.id || 0,
 	});
 
 	return (
