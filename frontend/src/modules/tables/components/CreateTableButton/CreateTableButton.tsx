@@ -48,7 +48,7 @@ export const CreateTableButton = (props: ICreateTableButtonProps) => {
 					onClick={handleOpen}
 					pos={'absolute'}
 					bottom={'2rem'}
-					left={'2rem'}
+					right={'2rem'}
 					variant="light"
 					size={'4rem'}
 					radius={'5rem'}
@@ -78,7 +78,10 @@ export const CreateTableButton = (props: ICreateTableButtonProps) => {
 						)) || (
 							<Grid.Col span={12}>
 								<Select
-									data={roomData?.map((room) => ({ label: room, value: room }))}
+									data={roomData?.map((room) => ({
+										label: room[0].toUpperCase() + room.slice(1).toLowerCase(),
+										value: room,
+									}))}
 									label={'Room'}
 									placeholder={'Select a room'}
 									required
