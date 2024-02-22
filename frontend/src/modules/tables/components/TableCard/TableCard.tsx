@@ -1,4 +1,5 @@
-import { Flex, Text, Card, Button } from '@mantine/core';
+import { Flex, Text, Card, Badge } from '@mantine/core';
+import Link from 'next/link';
 import { apiHooks } from '~/api';
 
 interface ITableCardProps {
@@ -12,15 +13,20 @@ export const TableCard = ({ ...props }: ITableCardProps) => {
 		params: { id: props.tableID },
 	});
 
+	const { data: customerData } = apiHooks.useGetTableIdcustomer({
+		params: { id: props.tableID },
+	});
+
 	return (
 		<Card
 			shadow="sm"
 			padding="lg"
-			h={'8rem'}
+			h={'9rem'}
 			w={'10rem'}
 			radius="sm"
-			bg={'#ff7777'}
 			withBorder
+			component={Link}
+			href={'/tables/' + props.tableID}
 		>
 			<Flex
 				justify="center"
@@ -28,11 +34,14 @@ export const TableCard = ({ ...props }: ITableCardProps) => {
 				w={'100%'}
 				h={'100%'}
 				direction={'column'}
+				gap={'xs'}
 			>
+				<Badge radius={'xs'} color="green">
+					{customerData?.length}
+				</Badge>
 				<Text fw={600} size="xl">
 					{data?.name}
 				</Text>
-				<Button>bruh</Button>
 			</Flex>
 		</Card>
 	);
