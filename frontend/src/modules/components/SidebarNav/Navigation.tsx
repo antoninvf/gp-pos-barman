@@ -38,21 +38,23 @@ export default function Navigation({}: NavigationProps) {
 
 	const bottomPages = [
 		{
-			icon: <IconCat size={iconSize} stroke={1.5} />,
-			label: 'debug',
-			href: '/admin/debug',
-		},
-		{
 			icon: <IconChefHat size={iconSize} stroke={1.5} />,
 			label: 'Kitchen',
 			href: '/kitchen',
+		},
+		{
+			icon: <IconCat size={iconSize} stroke={1.5} />,
+			label: 'Application Settings',
+			href: '/admin/appSettings',
 		},
 	];
 
 	return (
 		<Paper shadow="lg" w={'30vh'} h={'100vh'} bg={'white'}>
 			<Flex direction={'column'} align={'center'} w={'30vh'} h={'100vh'}>
-				<BarmanLogo size={5} padding={1} />
+				<Link href={'/'} style={{ textDecoration: 'none', color: 'black' }}>
+					<BarmanLogo size={5} padding={1} />
+				</Link>
 				<Divider w={'95%'} opacity={0.5} />
 				{pages.map((link, index) => (
 					<NavLink
