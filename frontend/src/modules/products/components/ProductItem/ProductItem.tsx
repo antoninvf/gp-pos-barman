@@ -1,5 +1,4 @@
 import { Badge, Card, Flex, Text, Image, Button } from '@mantine/core';
-import { useAddToKitchenQueue } from '~kitchenQueue';
 
 interface IProductItemProps {
 	id?: string | null;
@@ -11,10 +10,6 @@ interface IProductItemProps {
 }
 
 export const ProductItem = ({ ...props }: IProductItemProps) => {
-	const { submit, isLoading } = useAddToKitchenQueue({
-		afterSubmit: () => {},
-	});
-
 	return (
 		<Card shadow="sm" padding="lg" radius="sm" withBorder>
 			<Flex justify="space-between" align={'start'} gap={'6rem'}>
@@ -24,13 +19,8 @@ export const ProductItem = ({ ...props }: IProductItemProps) => {
 				{<Badge color="green">{props.price}</Badge>}
 			</Flex>
 			<Text size="lg">{props.category}</Text>
-			<Image src={props.imageURL} />
+			<Image src={props.imageURL} alt="" />
 			<Text size="lg">{props.description}</Text>
-			<Button
-				onClick={() => submit({ productID: props.id ?? '', note: 'test note' })}
-			>
-				test order "{props.id}"
-			</Button>
 		</Card>
 	);
 };
