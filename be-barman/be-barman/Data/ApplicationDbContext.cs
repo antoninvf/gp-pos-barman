@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<TableEntity> TableEntities { get; set; }
     public DbSet<CustomerEntity> CustomerEntities { get; set; }
     public DbSet<OrderEntity> OrderEntities { get; set; }
+    public DbSet<UserEntity> UserEntities { get; set; }
     public DbSet<ConfigurationEntity> ConfigurationEntities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +28,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<TableEntity>().HasKey(x => x.ID);
         modelBuilder.Entity<CustomerEntity>().HasKey(x => x.UUID);
         modelBuilder.Entity<OrderEntity>().HasKey(x => x.ID);
+        modelBuilder.Entity<UserEntity>().HasKey(x => x.UUID);
         modelBuilder.Entity<ConfigurationEntity>().HasKey(x => x.ID);
         
         // set up auto-incrementing primary keys
