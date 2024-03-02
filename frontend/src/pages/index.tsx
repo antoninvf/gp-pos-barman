@@ -1,14 +1,15 @@
-import { Text, Code, Flex, Group, Tabs, rem } from '@mantine/core';
-import { useMove } from '@mantine/hooks';
-import { useState } from 'react';
+import { Flex } from '@mantine/core';
+import { ProtectedPage } from '~api';
 import Navigation from '~components/SidebarNav/Navigation';
 import { RoomTabs } from '~tables';
 
 export default function Dashboard() {
 	return (
-		<Flex>
-			<Navigation />
-			<RoomTabs />
-		</Flex>
+		<ProtectedPage>
+			<Flex>
+				<Navigation />
+				<RoomTabs />
+			</Flex>
+		</ProtectedPage>
 	);
 }

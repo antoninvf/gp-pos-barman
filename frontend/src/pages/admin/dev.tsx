@@ -1,4 +1,5 @@
 import { Button, Flex, Group } from '@mantine/core';
+import { ProtectedPage } from '~api';
 import Navigation from '~components/SidebarNav/Navigation';
 import { useClearCustomers } from '~customers';
 import { useClearKitchenQueue } from '~kitchenQueue';
@@ -13,16 +14,18 @@ export default function DeveloperMenu() {
 	});
 
 	return (
-		<Flex>
-			<Navigation />
-			<Flex direction={'column'} gap={'sm'} p={'1rem'}>
-				<Button onClick={() => clearKitchenQueue()} color="red">
-					Clear kitchen queue
-				</Button>
-				<Button onClick={() => clearAllCustomers()} color="red">
-					Clear all customers
-				</Button>
+		<ProtectedPage>
+			<Flex>
+				<Navigation />
+				<Flex direction={'column'} gap={'sm'} p={'1rem'}>
+					<Button onClick={() => clearKitchenQueue()} color="red">
+						Clear kitchen queue
+					</Button>
+					<Button onClick={() => clearAllCustomers()} color="red">
+						Clear all customers
+					</Button>
+				</Flex>
 			</Flex>
-		</Flex>
+		</ProtectedPage>
 	);
 }
