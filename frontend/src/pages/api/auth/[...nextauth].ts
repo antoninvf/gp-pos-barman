@@ -1,8 +1,15 @@
-import NextAuth from 'next-auth';
+import axios from 'axios';
 import type { NextAuthOptions } from 'next-auth';
+import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const authOptions: NextAuthOptions = {
+	secret: process.env.NEXTAUTH_SECRET,
+	pages: {
+		signIn: '/auth/login',
+		//signOut: '/auth/logout',
+		error: '/auth/login', // Error code passed in query string as ?error=
+	},
 	providers: [
 		CredentialsProvider({
 			// The name to display on the sign in form (e.g. "Sign in with...")
@@ -12,22 +19,29 @@ export const authOptions: NextAuthOptions = {
 			// e.g. domain, username, password, 2FA token, etc.
 			// You can pass any HTML attribute to the <input> tag through the object.
 			credentials: {
-				username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
+				username: { label: 'Username', type: 'text' },
 				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials, req) {
-				// Add logic here to look up the user from the credentials supplied
-				const user = { id: '1', name: 'J Smith', email: 'jsmith@example.com' };
+				if (credentials == null) return null;
 
-				if (user) {
-					// Any object returned will be saved in `user` property of the JWT
+				const res = await axios({
+					method: 'POST',
+					url: 'http://localhost:8001/user/login',
+					data: credentials,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+
+				if (res.status == 200) {
+					const user = await res.data;
 					return user;
-				} else {
-					// If you return null then an error will be displayed advising the user to check their details.
+				} else if (res.status === 401) {
 					return null;
-
-					// You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
 				}
+				// Return null if user data could not be retrieved
+				return null;
 			},
 		}),
 	],
