@@ -47,7 +47,7 @@ export const CreateTableButton = (props: ICreateTableButtonProps) => {
 				<ActionIcon
 					onClick={handleOpen}
 					pos={'absolute'}
-					bottom={'2rem'}
+					top={'2rem'}
 					right={'2rem'}
 					variant="light"
 					size={'4rem'}
