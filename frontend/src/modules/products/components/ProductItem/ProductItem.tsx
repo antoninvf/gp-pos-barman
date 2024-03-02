@@ -1,4 +1,5 @@
 import { Badge, Card, Flex, Text, Image, Button } from '@mantine/core';
+import Link from 'next/link';
 
 interface IProductItemProps {
 	id?: string | null;
@@ -11,7 +12,15 @@ interface IProductItemProps {
 
 export const ProductItem = ({ ...props }: IProductItemProps) => {
 	return (
-		<Card shadow="sm" padding="lg" radius="sm" withBorder>
+		<Card
+			shadow="sm"
+			padding="lg"
+			radius="sm"
+			withBorder
+			onClick={() => {
+				alert('clicked on ' + props.name + ' (' + props.id + ')');
+			}}
+		>
 			<Flex justify="space-between" align={'start'} gap={'6rem'}>
 				<Text fw={600} size="xl">
 					{props.name ? props.name : props.id}
