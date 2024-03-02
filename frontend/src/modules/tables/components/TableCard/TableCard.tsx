@@ -1,4 +1,5 @@
 import { Flex, Text, Card, Badge } from '@mantine/core';
+import { IconUserFilled } from '@tabler/icons-react';
 import Link from 'next/link';
 import { apiHooks } from '~/api';
 
@@ -36,7 +37,11 @@ export const TableCard = ({ ...props }: ITableCardProps) => {
 				direction={'column'}
 				gap={'xs'}
 			>
-				<Badge radius={'xs'} color="green">
+				<Badge
+					rightSection={<IconUserFilled size={'1rem'} />}
+					radius={'xs'}
+					color={customerData?.length || 0 > 0 ? 'red' : 'green'}
+				>
 					{customerData?.length}
 				</Badge>
 				<Text fw={600} size="xl">
