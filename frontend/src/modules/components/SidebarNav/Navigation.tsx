@@ -1,13 +1,14 @@
-import { Divider, Flex, NavLink, Paper } from '@mantine/core';
+import { Button, Divider, Flex, NavLink, Paper, Text } from '@mantine/core';
 import {
 	IconBorderAll,
 	IconBoxSeam,
 	IconCat,
 	IconChefHat,
-	IconGauge,
 	IconGlassFull,
-	IconToolsKitchen,
+	IconLogout,
+	IconSettings,
 } from '@tabler/icons-react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import BarmanLogo from '~components/BarmanLogo/BarmanLogo';
@@ -15,6 +16,8 @@ import BarmanLogo from '~components/BarmanLogo/BarmanLogo';
 interface NavigationProps {}
 
 export default function Navigation({}: NavigationProps) {
+	const session = useSession();
+
 	const router = useRouter();
 	const iconSize = '2rem';
 
@@ -67,6 +70,7 @@ export default function Navigation({}: NavigationProps) {
 						active={router.pathname === link.href}
 					></NavLink>
 				))}
+
 				<Flex mt={'auto'} direction={'column'} w={'100%'}>
 					{bottomPages.map((link, index) => (
 						<NavLink
@@ -79,6 +83,14 @@ export default function Navigation({}: NavigationProps) {
 							active={router.pathname === link.href}
 						></NavLink>
 					))}
+					<Button
+						radius={0}
+						mt={'sm'}
+						onClick={() => signOut()}
+						leftSection={<IconLogout size={'1.5rem'} />}
+					>
+						Sign out
+					</Button>
 				</Flex>
 			</Flex>
 		</Paper>
