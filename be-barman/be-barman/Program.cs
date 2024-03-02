@@ -74,4 +74,35 @@ using (var serviceScope = app.Services.GetService<IServiceScopeFactory>()?.Creat
     context?.Database.Migrate();
 }
 
+// create a default configuration if it doesn't exist
+using (var serviceScope = app.Services.GetService<IServiceScopeFactory>()?.CreateScope())
+{
+    var context = serviceScope?.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    if (!(context?.ConfigurationEntities).Any())
+    {
+        context?.ConfigurationEntities.Add(new()
+        {
+            SettingName = "currency",
+            Value = "Kč"
+        });
+        context?.SaveChanges();
+    }
+}
+
+// create a default admin user if it doesn't exist
+using (var serviceScope = app.Services.GetService<IServiceScopeFactory>()?.CreateScope())
+{
+    var context = serviceScope?.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    if (!(context?.UserEntities).Any())
+    {
+        context?.UserEntities.Add(new()
+        {
+            UUID = Guid.NewGuid().ToString(),
+            Username = "admin",
+            Password = BCrypt.Net.BCrypt.HashPassword("admin123"),
+        });
+        context?.SaveChanges();
+    }
+}
+
 app.Run();
