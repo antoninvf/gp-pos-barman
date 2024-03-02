@@ -84,6 +84,21 @@ public class BarmanController : ControllerBase
     {
         return new ActionResult<ProductEntity?>(_dbContext.ProductEntities.Find(id));
     }
+    
+    [HttpPut("product/{id}")]
+    public IActionResult PutProduct(string id, [FromBody] ProductModel productModel)
+    {
+        var productEntity = _dbContext.ProductEntities.Find(id);
+        if (productEntity == null) return NotFound("Product not found");
+        productEntity.Name = productModel.Name;
+        productEntity.Category = productModel.Category;
+        productEntity.Description = productModel.Description;
+        productEntity.ImageURL = productModel.ImageURL;
+        productEntity.Price = productModel.Price;
+        productEntity.SendToKitchenQueue = productModel.SendToKitchenQueue;
+        _dbContext.SaveChanges();
+        return Ok();
+    }
 
     [HttpPost("product")]
     public IActionResult PostProduct([FromBody] ProductModel productModel)
@@ -146,6 +161,44 @@ public class BarmanController : ControllerBase
     {
         return new ActionResult<TableEntity?>(_dbContext.TableEntities.Find(id));
     }
+    
+    [HttpPut("table/{id}")]
+    public IActionResult PutTable(int id, [FromBody] TableModel tableModel)
+    {
+        var tableEntity = _dbContext.TableEntities.Find(id);
+        if (tableEntity == null) return NotFound("Table not found");
+        tableEntity.Room = tableModel.Room;
+        tableEntity.Name = tableModel.Room[0].ToString().ToUpper() + (_dbContext.TableEntities.Count(x => x.Room.ToLower().Equals(tableModel.Room.ToLower())) + 1);
+        
+        // go through every table and update the names
+        // TODO: fix this
+        var tables = _dbContext.TableEntities.Where(x => x.Room.ToLower().Equals(tableModel.Room.ToLower())).ToList();
+        for (var i = 0; i < tables.Count; i++)
+        {
+            tables[i].Name = tableEntity.Room[0].ToString().ToUpper() + (i + 1);
+        }
+        
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+    
+    [HttpDelete("table/{id}")]
+    public IActionResult DeleteTable(int id)
+    {
+        var tableEntity = _dbContext.TableEntities.Find(id);
+        if (tableEntity == null) return NotFound("Table not found");
+        _dbContext.TableEntities.Remove(tableEntity);
+        
+        // go through every table and update the name if the room matches
+        var tables = _dbContext.TableEntities.Where(x => x.Room.ToLower().Equals(tableEntity.Room.ToLower())).ToList();
+        for (var i = 0; i < tables.Count; i++)
+        {
+            tables[i].Name = tableEntity.Room[0].ToString().ToUpper() + (i + 1);
+        }
+        
+        _dbContext.SaveChanges();
+        return Ok();
+    }
 
     [HttpGet("table/{id}/customer")]
     public ActionResult<IEnumerable<CustomerEntity?>> GetCustomerByTableId(int id)
@@ -163,7 +216,7 @@ public class BarmanController : ControllerBase
             .Where(x => x.Room.ToLower().Equals(room.ToLower()))
             .ToList());
     }
-
+    
     [HttpGet("tables/rooms")]
     public ActionResult<IEnumerable<string>> GetRooms()
     {
@@ -246,8 +299,9 @@ public class BarmanController : ControllerBase
         return new ActionResult<IEnumerable<OrderEntity>>(_dbContext.OrderEntities
             .Include(x => x.Product)
             .Include(x => x.Customer)
+            .Include(x => x.Customer.Table)
             .Where(x => x.Customer.UUID == uuid)
-            .OrderByDescending(x => x.Timestamp)
+            .OrderBy(x => x.Timestamp)
             .ToList());
     }
 
@@ -269,7 +323,7 @@ public class BarmanController : ControllerBase
         return new ActionResult<IEnumerable<OrderEntity>>(_dbContext.OrderEntities
             .Include(x => x.Customer)
             .Include(x => x.Product)
-            .OrderByDescending(x => x.Timestamp)
+            .OrderBy(x => x.Timestamp)
             .ToList());
     }
 
@@ -321,6 +375,88 @@ public class BarmanController : ControllerBase
         }
 
         _dbContext.OrderEntities.Add(orderEntity);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+    
+    //? Users
+    [HttpGet("users")]
+    public ActionResult<IEnumerable<UserEntity>> GetUsers()
+    {
+        return new ActionResult<IEnumerable<UserEntity>>(_dbContext.UserEntities.ToList());
+    }
+    [HttpGet("user/{uuid}")]
+    public ActionResult<UserEntity?> GetUser(string uuid)
+    {
+        return new ActionResult<UserEntity?>(_dbContext.UserEntities.Find(uuid));
+    }
+    [HttpPost("user")]
+    public IActionResult PostUser([FromBody] UserModel userModel)
+    {
+        if (userModel.Username.Trim() == "") return BadRequest("Username cannot be empty");
+        if (userModel.Password.Trim() == "") return BadRequest("Password cannot be empty");
+        if (userModel.Password.Length < 8) return BadRequest("Password must be at least 8 characters long");
+
+        var userEntity = new UserEntity
+        {
+            UUID = Guid.NewGuid().ToString(),
+            Username = userModel.Username,
+            Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password)
+        };
+        _dbContext.UserEntities.Add(userEntity);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+    [HttpPost("user/login")]
+    public ActionResult<UserModel> PostUserLogin([FromBody] UserModel userModel)
+    {
+        var user = _dbContext.UserEntities.FirstOrDefault(x => x.Username == userModel.Username);
+        if (user == null) return NotFound("User not found");
+        if (BCrypt.Net.BCrypt.Verify(userModel.Password, _dbContext.UserEntities.FirstOrDefault(x => x.Username == userModel.Username)?.Password))
+        {
+            // return user in json
+            _logger.LogInformation("User logged in: " + user.Username);
+            return new ActionResult<UserModel>(new UserModel {Username = user.Username, Password = user.Password});
+        }
+        _logger.LogInformation("Incorrect password for user: " + user.Username);
+        return Unauthorized("Incorrect password");
+    }
+
+    [HttpDelete("user/{uuid}")]
+    public IActionResult DeleteUser(string uuid)
+    {
+        var userEntity = _dbContext.UserEntities.Find(uuid);
+        if (userEntity == null) return NotFound("User not found");
+        _dbContext.UserEntities.Remove(userEntity);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+    
+    //? Configuration
+
+    [HttpGet("configuration")]
+    public ActionResult<IEnumerable<ConfigurationEntity>> GetConfiguration()
+    {
+        return new ActionResult<IEnumerable<ConfigurationEntity>>(_dbContext.ConfigurationEntities.ToList());
+    }
+    
+    [HttpGet("configuration/{settingName}")]
+    public ActionResult<string> GetConfiguration(string settingName)
+    {
+        var configuration = _dbContext.ConfigurationEntities.FirstOrDefault(x => x.SettingName == settingName);
+        if (configuration == null) return NotFound("Setting not found");
+        return new ActionResult<string>(configuration.Value);
+    }
+    
+    [HttpPost("configuration")]
+    public IActionResult PostConfiguration([FromBody] ConfigurationModel configurationModel)
+    {
+        var configurationEntity = new ConfigurationEntity
+        {
+            SettingName = configurationModel.SettingName,
+            Value = configurationModel.Value
+        };
+        _dbContext.ConfigurationEntities.Add(configurationEntity);
         _dbContext.SaveChanges();
         return Ok();
     }
