@@ -69,6 +69,26 @@ export const OrderModel = z
     notes: z.string().nullable(),
   })
   .partial();
+export const UserEntity = z
+  .object({
+    uuid: z.string().nullable(),
+    username: z.string().nullable(),
+    password: z.string().nullable(),
+  })
+  .partial();
+export const UserModel = z
+  .object({ username: z.string().nullable(), password: z.string().nullable() })
+  .partial();
+export const ConfigurationEntity = z
+  .object({
+    id: z.number().int().nullable(),
+    settingName: z.string().nullable(),
+    value: z.string().nullable(),
+  })
+  .partial();
+export const ConfigurationModel = z
+  .object({ settingName: z.string().nullable(), value: z.string().nullable() })
+  .partial();
 
 export const schemas = {
   TableEntity,
@@ -82,9 +102,48 @@ export const schemas = {
   TableModel,
   CustomerModel,
   OrderModel,
+  UserEntity,
+  UserModel,
+  ConfigurationEntity,
+  ConfigurationModel,
 };
 
 const endpoints = makeApi([
+  {
+    method: "get",
+    path: "/configuration",
+    alias: "getConfiguration",
+    requestFormat: "json",
+    response: z.array(ConfigurationEntity),
+  },
+  {
+    method: "post",
+    path: "/configuration",
+    alias: "postConfiguration",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: ConfigurationModel,
+      },
+    ],
+    response: z.void(),
+  },
+  {
+    method: "get",
+    path: "/configuration/:settingName",
+    alias: "getConfigurationSettingName",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "settingName",
+        type: "Path",
+        schema: id__2,
+      },
+    ],
+    response: z.string(),
+  },
   {
     method: "post",
     path: "/customer",
@@ -303,6 +362,25 @@ const endpoints = makeApi([
     response: ProductEntity,
   },
   {
+    method: "put",
+    path: "/product/:id",
+    alias: "putProductId",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: ProductModel,
+      },
+      {
+        name: "id",
+        type: "Path",
+        schema: id__2,
+      },
+    ],
+    response: z.void(),
+  },
+  {
     method: "delete",
     path: "/product/:id",
     alias: "deleteProductId",
@@ -366,6 +444,39 @@ const endpoints = makeApi([
     response: TableEntity,
   },
   {
+    method: "put",
+    path: "/table/:id",
+    alias: "putTableId",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: TableModel,
+      },
+      {
+        name: "id",
+        type: "Path",
+        schema: id,
+      },
+    ],
+    response: z.void(),
+  },
+  {
+    method: "delete",
+    path: "/table/:id",
+    alias: "deleteTableId",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "id",
+        type: "Path",
+        schema: id,
+      },
+    ],
+    response: z.void(),
+  },
+  {
     method: "get",
     path: "/table/:id/customer",
     alias: "getTableIdcustomer",
@@ -406,6 +517,69 @@ const endpoints = makeApi([
     alias: "getTablesrooms",
     requestFormat: "json",
     response: z.array(z.string()),
+  },
+  {
+    method: "post",
+    path: "/user",
+    alias: "postUser",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: UserModel,
+      },
+    ],
+    response: z.void(),
+  },
+  {
+    method: "get",
+    path: "/user/:uuid",
+    alias: "getUserUuid",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "uuid",
+        type: "Path",
+        schema: id__2,
+      },
+    ],
+    response: UserEntity,
+  },
+  {
+    method: "delete",
+    path: "/user/:uuid",
+    alias: "deleteUserUuid",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "uuid",
+        type: "Path",
+        schema: id__2,
+      },
+    ],
+    response: z.void(),
+  },
+  {
+    method: "post",
+    path: "/user/login",
+    alias: "postUserlogin",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "body",
+        type: "Body",
+        schema: UserModel,
+      },
+    ],
+    response: UserModel,
+  },
+  {
+    method: "get",
+    path: "/users",
+    alias: "getUsers",
+    requestFormat: "json",
+    response: z.array(UserEntity),
   },
 ]);
 
