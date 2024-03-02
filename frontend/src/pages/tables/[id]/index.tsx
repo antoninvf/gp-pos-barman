@@ -1,29 +1,33 @@
-import { Button, Divider, Flex, Paper, Text, Title } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { IconCheck } from '@tabler/icons-react';
+import {
+	Badge,
+	Button,
+	Divider,
+	Flex,
+	Paper,
+	Skeleton,
+	Text,
+	Title,
+} from '@mantine/core';
+import { IconCheck, IconUserFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { apiHooks, schemas } from '~api';
+import { useState } from 'react';
+import { ProtectedPage, apiHooks } from '~api';
 import Navigation from '~components/SidebarNav/Navigation';
 import { useCreateCustomer } from '~customers';
-import { type z } from 'zod';
+import { CustomerCard } from '../../../modules/customers/components/CustomerCard/CustomerCard';
 
 export default function TablesDetail() {
 	const router = useRouter();
 	const { id } = router.query;
 
-	// check if id is number, if not return to dashboard
-	useEffect(() => {
-		if (typeof id !== 'string') {
-			router.push('/');
-		}
-	}, [router, id]);
+	// usestate for new customer button
+	const [newCustomer, setNewCustomer] = useState(false);
 
-	const { data } = apiHooks.useGetTableId({
+	const { data, isLoading } = apiHooks.useGetTableId({
 		params: { id: Number(id) },
 	});
 
-	const { submit, isLoading } = useCreateCustomer({
+	const { submit } = useCreateCustomer({
 		afterSubmit: () => {},
 	});
 
@@ -31,60 +35,91 @@ export default function TablesDetail() {
 		params: { id: Number(id) },
 	});
 
-	if (data === undefined) return null;
-
 	const buttonStyle = {
 		width: '90%',
 		height: '3rem',
 	};
 
 	return (
-		<Flex>
-			<Navigation />
-			<Flex direction={'column'} w={'100%'} p={'1rem'}>
-				insert component for products tabs
-				<Text>Name: {data.name}</Text>
-				<Text>Room: {data.room}</Text>
-			</Flex>
-			<Paper shadow="lg" w={'30vh'} h={'100vh'} bg={'white'}>
-				<Flex direction={'column'} align={'center'} w={'30vh'} h={'100vh'}>
-					<Title py={'lg'} order={1}>
-						Table {data.name}
-					</Title>
-					<Divider w={'95%'} opacity={0.5} />
-					<Flex
-						mt={'xl'}
-						direction={'column'}
-						gap={'sm'}
-						w={'100%'}
-						align={'center'}
-					>
-						<Button
-							onClick={() => submit({ tableID: Number(id) })}
-							style={buttonStyle}
-							disabled={(customerData?.length || 0) > 0}
-						>
-							New customer
-						</Button>
-					</Flex>
-					<Flex
-						mt={'auto'}
-						pb={'lg'}
-						direction={'column'}
-						gap={'sm'}
-						w={'100%'}
-						align={'center'}
-					>
-						<Button
-							style={buttonStyle}
-							color="green"
-							leftSection={<IconCheck />}
-						>
-							Finish order
-						</Button>
-					</Flex>
+		<ProtectedPage>
+			<Flex>
+				<Navigation />
+				<Flex direction={'column'} w={'100%'} p={'1rem'}>
+					insert component for products tabs
+					<Text>Name: {data?.name}</Text>
+					<Text>Room: {data?.room}</Text>
+					<Text>Customer count: {customerData?.length}</Text>
+					<Text>Customers: {customerData?.map((x) => x.uuid)}</Text>
 				</Flex>
-			</Paper>
-		</Flex>
+				<Paper
+					shadow="lg"
+					w={'35vh'}
+					h={'100vh'}
+					bg={'white'}
+					component={Skeleton}
+					visible={false}
+				>
+					<Flex direction={'column'} align={'center'} w={'35vh'} h={'100vh'}>
+						<Badge
+							mt={'lg'}
+							rightSection={<IconUserFilled size={'1rem'} />}
+							radius={'xs'}
+							color={customerData?.length || 0 > 0 ? 'red' : 'green'}
+						>
+							{customerData?.length}
+						</Badge>
+						<Title order={1}>Table {data?.name}</Title>
+						<Text pb={'lg'}>
+							{data?.room?.[0].toUpperCase()}
+							{data?.room?.slice(1)}
+						</Text>
+						<Divider w={'95%'} opacity={0.5} />
+						<Flex
+							direction={'column'}
+							mt={'sm'}
+							gap={'sm'}
+							w={'100%'}
+							align={'center'}
+						>
+							<Button
+								my={'sm'}
+								onClick={() => {
+									submit({ tableID: Number(id) });
+									setNewCustomer(true);
+									setTimeout(() => {
+										setNewCustomer(false);
+									}, 1000);
+								}}
+								style={buttonStyle}
+								disabled={(customerData?.length || 0) > 0}
+								loading={newCustomer}
+							>
+								New customer
+							</Button>
+
+							{customerData?.map((x) => (
+								<CustomerCard key={x.uuid} customerUUID={x.uuid} />
+							))}
+						</Flex>
+						<Flex
+							mt={'auto'}
+							pb={'lg'}
+							direction={'column'}
+							gap={'sm'}
+							w={'100%'}
+							align={'center'}
+						>
+							<Button
+								style={buttonStyle}
+								color="green"
+								leftSection={<IconCheck />}
+							>
+								Finish order
+							</Button>
+						</Flex>
+					</Flex>
+				</Paper>
+			</Flex>
+		</ProtectedPage>
 	);
 }
