@@ -72,6 +72,23 @@ namespace be_barman.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "UserEntities",
+                columns: table => new
+                {
+                    UUID = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Username = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserEntities", x => x.UUID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "CustomerEntities",
                 columns: table => new
                 {
@@ -174,6 +191,9 @@ namespace be_barman.Migrations
 
             migrationBuilder.DropTable(
                 name: "KitchenQueueEntities");
+
+            migrationBuilder.DropTable(
+                name: "UserEntities");
 
             migrationBuilder.DropTable(
                 name: "OrderEntities");

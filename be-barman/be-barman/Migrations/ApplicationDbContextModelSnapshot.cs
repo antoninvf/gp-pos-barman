@@ -155,6 +155,22 @@ namespace be_barman.Migrations
                     b.ToTable("TableEntities");
                 });
 
+            modelBuilder.Entity("be_barman.Entities.UserEntity", b =>
+                {
+                    b.Property<string>("UUID")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UUID");
+
+                    b.ToTable("UserEntities");
+                });
+
             modelBuilder.Entity("be_barman.Entities.CustomerEntity", b =>
                 {
                     b.HasOne("be_barman.Entities.TableEntity", "Table")

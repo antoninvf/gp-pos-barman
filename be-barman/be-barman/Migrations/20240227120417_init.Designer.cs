@@ -11,7 +11,7 @@ using be_barman.Data;
 namespace be_barman.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240220081652_init")]
+    [Migration("20240227120417_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -156,6 +156,22 @@ namespace be_barman.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("TableEntities");
+                });
+
+            modelBuilder.Entity("be_barman.Entities.UserEntity", b =>
+                {
+                    b.Property<string>("UUID")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UUID");
+
+                    b.ToTable("UserEntities");
                 });
 
             modelBuilder.Entity("be_barman.Entities.CustomerEntity", b =>
