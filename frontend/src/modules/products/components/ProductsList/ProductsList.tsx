@@ -1,7 +1,7 @@
 import { ActionIcon, Flex, Table } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { apiHooks } from '~/api';
-import { ProductItem } from '~products';
+import { ProductItem } from '../ProductItem';
 
 interface IProductsListProps {}
 
@@ -28,31 +28,14 @@ export const ProductsList = (props: IProductsListProps) => {
 				<Table.Tbody>
 					{data?.map(({ id, name, category, price }) => {
 						return (
-							<Table.Tr key={id}>
-								<Table.Td>{id}</Table.Td>
-								<Table.Td>{name}</Table.Td>
-								<Table.Td>{category}</Table.Td>
-								<Table.Td>
-									{price} {currencyData}
-								</Table.Td>
-								<Table.Td>
-									<Flex gap={'sm'} align={'center'}>
-										<ActionIcon
-											size={'2.5rem'}
-											onClick={() => alert('fuck ' + name)}
-										>
-											<IconEdit size={'1.5rem'} />
-										</ActionIcon>
-										<ActionIcon
-											color="red"
-											size={'2.5rem'}
-											onClick={() => alert('fuck ' + name)}
-										>
-											<IconTrash size={'1.5rem'} />
-										</ActionIcon>
-									</Flex>
-								</Table.Td>
-							</Table.Tr>
+							<ProductItem
+								key={id}
+								id={id}
+								name={name}
+								category={category}
+								price={price}
+								currencyData={currencyData}
+							/>
 						);
 					})}
 				</Table.Tbody>
