@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
 
 				const res = await axios({
 					method: 'POST',
-					url: 'http://localhost:8001/user/login',
+					url: `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
 					data: credentials,
 					headers: {
 						'Content-Type': 'application/json',
