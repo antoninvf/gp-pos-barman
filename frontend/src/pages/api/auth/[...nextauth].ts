@@ -27,10 +27,11 @@ export const authOptions: NextAuthOptions = {
 
 				const res = await axios({
 					method: 'POST',
-					url: `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
+					url: `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/user/login`,
 					data: credentials,
 					headers: {
 						'Content-Type': 'application/json',
+						'X-API-Key': process.env.NEXT_PUBLIC_BACKEND_API_KEY,
 					},
 				});
 
