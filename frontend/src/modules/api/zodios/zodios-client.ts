@@ -1,6 +1,5 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { ZodiosHooks } from "@zodios/react";
-import { env } from "~/env";
 
 import { z } from "zod";
 
@@ -583,8 +582,14 @@ const endpoints = makeApi([
   },
 ]);
 
-export const api = new Zodios(env.NEXT_PUBLIC_SERVER_URL, endpoints);
+export const api = new Zodios(
+  process.env.NEXT_PUBLIC_BACKEND_API_URL || "",
+  endpoints
+);
 export const apiHooks = new ZodiosHooks("barman", api);
+
+api.axios.defaults.headers["X-API-Key"] =
+  process.env.NEXT_PUBLIC_BACKEND_API_KEY || "";
 
 export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
   return new Zodios(baseUrl, endpoints, options);
