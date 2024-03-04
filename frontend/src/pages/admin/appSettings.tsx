@@ -1,6 +1,6 @@
 import { Flex } from '@mantine/core';
 import Link from 'next/link';
-import Navigation from '~components/SidebarNav/Navigation';
+import Navigation from '~components/Navigation/Navigation';
 import { ProtectedPage } from '~api';
 
 export default function AppSettings() {
