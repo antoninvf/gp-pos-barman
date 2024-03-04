@@ -1,4 +1,5 @@
 using be_barman.Data;
+using be_barman.Models;
 using dotenv.net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -33,20 +34,34 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Barman API", Version = "v1" });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
     {
-        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
-                      Enter 'Bearer' [space] and then your token in the text input below.
-                      \r\n\r\nExample: 'Bearer 12345abcdef'",
-        Name = "Authorization",
+        Description = "Header API Key",
+        Name = "X-API-Key",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
+            },
+            new string[] { }
+        }
     });
 
     // Hide endpoints for "/" and "/{url}"
     c.DocInclusionPredicate((_, api) => !string.IsNullOrWhiteSpace(api.RelativePath));
 });
+
+builder.Services.AddSingleton<ApiKeyAuthorizationFilter>();
+builder.Services.AddSingleton<IApiKeyValidator, ApiKeyValidator>();
+
 
 var app = builder.Build();
 
@@ -57,7 +72,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/api-docs/v1/swagger.json", "Barman API V1");
     c.RoutePrefix = "api-docs";
 });
-
 
 app.UseStaticFiles();
 

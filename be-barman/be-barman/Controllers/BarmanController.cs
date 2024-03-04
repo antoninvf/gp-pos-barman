@@ -10,6 +10,7 @@ namespace be_barman.Controllers;
 [EnableCors("CorsPolicy")]
 [ApiController]
 [Route("")]
+[ApiKey]
 public class BarmanController : ControllerBase
 {
     // ReSharper disable once NotAccessedField.Local
@@ -21,7 +22,7 @@ public class BarmanController : ControllerBase
         _logger = logger;
         _dbContext = dbContext;
     }
-
+    
     //? KitchenQueue
     [HttpGet("kitchenQueue")]
     public ActionResult<IEnumerable<KitchenQueueEntity>> GetKitchenQueue()
