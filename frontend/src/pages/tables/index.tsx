@@ -1,6 +1,6 @@
 import { Flex } from '@mantine/core';
 import { ProtectedPage } from '~api';
-import Navigation from '~components/SidebarNav/Navigation';
+import Navigation from '~components/Navigation/Navigation';
 import { CreateTableButton, TablesList } from '~tables';
 
 export default function Tables() {

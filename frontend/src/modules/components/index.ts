@@ -1,2 +1,2 @@
-export * from './SidebarNav';
+export * from './Navigation';
 export * from './BarmanLogo';

@@ -1,6 +1,6 @@
 import { Flex } from '@mantine/core';
 import { ProtectedPage } from '~api';
-import Navigation from '~components/SidebarNav/Navigation';
+import Navigation from '~components/Navigation/Navigation';
 import { ProductsList } from '~products';
 import { CreateProductButton } from '../modules/products/components/CreateProductButton/CreateProductButton';
 

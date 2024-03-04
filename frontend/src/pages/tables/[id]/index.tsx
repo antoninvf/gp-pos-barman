@@ -12,7 +12,7 @@ import { IconCheck, IconUserFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { ProtectedPage, apiHooks } from '~api';
-import Navigation from '~components/SidebarNav/Navigation';
+import Navigation from '~components/Navigation/Navigation';
 import { useCreateCustomer } from '~customers';
 import { CustomerCard } from '../../../modules/customers/components/CustomerCard/CustomerCard';
 
