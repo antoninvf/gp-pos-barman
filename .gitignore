@@ -143,3 +143,5 @@ be-barman/be-barman/obj/project.nuget.cache
 be-barman/be-barman/obj/project.packagespec.json
 be-barman/be-barman/obj/rider.project.model.nuget.info
 be-barman/be-barman/obj/rider.project.restore.info
+
+.env
