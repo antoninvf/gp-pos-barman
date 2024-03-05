@@ -6,6 +6,11 @@ services:
       - "8000:3000"
     depends_on:
       - backend
+    environment:
+      NEXTAUTH_URL: ${BARMAN_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      API_URL: backend:5036
+      API_KEY: ${API_KEY}
   backend:
     build: be-barman/be-barman/.
     restart: on-failure
@@ -13,18 +18,26 @@ services:
       - "8001:5036"
     depends_on:
       - mariadb
+    environment:
+      DB_NAME: barman
+      DB_SERVER: mariadb
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_VERSION_MAJOR: 10
+      DB_VERSION_MINOR: 11
+      DB_VERSION_BUILD: 3
+      API_KEY: ${API_KEY}
   mariadb:
     image: mariadb:10.11.3
     restart: always
     ports:
       - "8003:3306"
-    command: --init-file /data/application/init.sql
     environment:
       MYSQL_DATABASE: barman
-      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_CHARSET: utf8mb4_unicode_ci
     volumes:
-      - ./barman.sql:/data/application/init.sql
       - ./mariadb-data:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin:latest
@@ -34,7 +47,5 @@ services:
     environment:
       PMA_HOST: mariadb
       PMA_USER: root
-      PMA_PASSWORD: changeme
     depends_on:
       - mariadb
-    
