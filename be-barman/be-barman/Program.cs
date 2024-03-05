@@ -1,6 +1,6 @@
+using System.Collections;
 using be_barman.Data;
 using be_barman.Models;
-using dotenv.net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -17,16 +17,30 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
 
-DotEnv.Load(options: new DotEnvOptions(envFilePaths: new[] { ".env" }));
+var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var dbVersionMajor = Environment.GetEnvironmentVariable("DB_VERSION_MAJOR");
+var dbVersionMinor = Environment.GetEnvironmentVariable("DB_VERSION_MINOR");
+var dbVersionBuild = Environment.GetEnvironmentVariable("DB_VERSION_BUILD");
 
-MySqlServerVersion version = new MySqlServerVersion(new Version(int.Parse(DotEnv.Read()["DB_VERSION_MAJOR"]),
-    int.Parse(DotEnv.Read()["DB_VERSION_MINOR"]), int.Parse(DotEnv.Read()["DB_VERSION_BUILD"])));
-// Set server to host.docker.internal if running in Docker
-var dbServer = DotEnv.Read()["DB_SERVER"];
-if (Environment.GetEnvironmentVariable("RUNNING_IN_DOCKER") == "true") dbServer = "host.docker.internal";
+if (dbVersionMajor == null || dbVersionMinor == null || dbVersionBuild == null)
+{
+    throw new Exception("Database version is not set in environment variables!");
+}
+
+MySqlServerVersion version = new MySqlServerVersion(new Version(int.Parse(dbVersionMajor),
+    int.Parse(dbVersionMinor), int.Parse(dbVersionBuild)));
+
+foreach (DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables())
+{
+    Console.WriteLine(environmentVariable.Key + " = " + environmentVariable.Value);
+}
 
 string connectionString =
-    $"server={dbServer};port={DotEnv.Read()["DB_PORT"]};user={DotEnv.Read()["DB_USER"]};password={DotEnv.Read()["DB_PASSWORD"]};database={DotEnv.Read()["DB_NAME"]}";
+    $"server={dbServer};port={dbPort};user={dbUser};password={dbPassword};database={dbName}";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, version, x => x.EnableRetryOnFailure()));
 
