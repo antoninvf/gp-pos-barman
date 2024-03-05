@@ -9,7 +9,7 @@ services:
     environment:
       NEXTAUTH_URL: ${BARMAN_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      API_URL: backend:5036
+      NEXT_PUBLIC_BACKEND_API_URL: backend:5036
       API_KEY: ${API_KEY}
   backend:
     build: be-barman/be-barman/.
