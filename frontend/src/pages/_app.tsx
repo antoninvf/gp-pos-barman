@@ -52,6 +52,12 @@ export default function App({
 						refetchInterval={30}
 						refetchOnWindowFocus={false}
 					>
+						<link
+							rel="icon"
+							href="/favicon.svg"
+							sizes="any"
+							type="image/svg+xml"
+						/>
 						{Component.auth ? (
 							<Auth>
 								<Component {...pageProps} />
