@@ -1,16 +1,24 @@
+version: '3'
+
 services:
   frontend:
-    build: frontend/.
+    build: 
+      context: frontend/.
+      args:
+        NEXT_PUBLIC_BACKEND_API_URL: ${BACKEND_URL}
+        NEXT_PUBLIC_BACKEND_API_KEY: ${API_KEY}
+        NEXTAUTH_URL: ${BARMAN_URL}
+        NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
     restart: on-failure
     ports:
       - "8000:3000"
-    depends_on:
-      - backend
     environment:
       NEXTAUTH_URL: ${BARMAN_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      NEXT_PUBLIC_BACKEND_API_URL: backend:5036
-      API_KEY: ${API_KEY}
+      NEXT_PUBLIC_BACKEND_API_URL: ${BACKEND_URL}
+      NEXT_PUBLIC_BACKEND_API_KEY: ${API_KEY}
+    env_file:
+      - .env
   backend:
     build: be-barman/be-barman/.
     restart: on-failure
