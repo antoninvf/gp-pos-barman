@@ -5,12 +5,11 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
 # build
-ENV NEXT_PUBLIC_BACKEND_API_KEY=${NEXT_PUBLIC_BACKEND_API_KEY}
-ENV NEXT_PUBLIC_BACKEND_API_URL=${NEXT_PUBLIC_BACKEND_API_URL}
-ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+ARG NEXT_PUBLIC_BACKEND_API_URL=https://api.example.com
+ARG NEXT_PUBLIC_BACKEND_API_KEY=temporary
 RUN yarn build
 
-FROM node:alpine
+FROM node:20-alpine
 WORKDIR /app
 # copy from build image
 COPY --from=BUILD_IMAGE /app/package.json ./package.json
