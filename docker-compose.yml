@@ -28,7 +28,7 @@ services:
       - mariadb
     environment:
       DB_NAME: barman
-      DB_SERVER: mariadb
+      DB_SERVER: ${DB_SERVER}
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
