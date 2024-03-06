@@ -1,7 +1,7 @@
 import { Flex, Title } from '@mantine/core';
 import { IconClockPause } from '@tabler/icons-react';
 import { apiHooks } from '~/api';
-import { KitchenQueueItem } from '~kitchenQueue';
+import { KitchenQueueItem } from '../KitchenQueueItem';
 
 interface IKitchenQueueProps {}
 

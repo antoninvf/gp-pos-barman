@@ -1,7 +1,7 @@
 import { ActionIcon, Badge, Card, Flex, Text } from '@mantine/core';
 import { IconCheckbox } from '@tabler/icons-react';
 import moment from 'moment';
-import { apiHooks, schemas } from '~api';
+import { schemas } from '~api';
 import { useRemoveFromKitchenQueue } from '~kitchenQueue/hooks';
 import { type z } from 'zod';
 
