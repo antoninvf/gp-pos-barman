@@ -11,7 +11,7 @@ services:
         NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
     restart: on-failure
     ports:
-      - "8000:3000"
+      - "7000:3000"
     environment:
       NEXTAUTH_URL: ${BARMAN_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
@@ -23,7 +23,7 @@ services:
     build: be-barman/be-barman/.
     restart: on-failure
     ports:
-      - "8001:5036"
+      - "7001:5036"
     depends_on:
       - mariadb
     environment:
@@ -40,7 +40,7 @@ services:
     image: mariadb:10.11.3
     restart: always
     ports:
-      - "8003:3306"
+      - "7003:3306"
     environment:
       MYSQL_DATABASE: barman
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -51,7 +51,7 @@ services:
     image: phpmyadmin:latest
     restart: always
     ports:
-      - "8002:80"
+      - "7002:80"
     environment:
       PMA_HOST: mariadb
       PMA_USER: root
