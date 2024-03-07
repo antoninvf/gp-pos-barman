@@ -16,6 +16,7 @@ import Navigation from '~components/Navigation/Navigation';
 import { useCreateCustomer } from '~customers';
 import { CustomerCard } from '../../../modules/customers/components/CustomerCard/CustomerCard';
 import { useReactToPrint } from 'react-to-print';
+import { OrderProductGrid } from '~orders';
 
 export default function TablesDetail() {
 	const router = useRouter();
@@ -53,12 +54,10 @@ export default function TablesDetail() {
 			<ProtectedPage>
 				<Flex>
 					<Navigation />
-					<Flex direction={'column'} w={'100%'} p={'1rem'}>
-						insert component for products tabs
-						<Text>Name: {data?.name}</Text>
-						<Text>Room: {data?.room}</Text>
-						<Text>Customer count: {customerData?.length}</Text>
-						<Text>Customers: {customerData?.map((x) => x.uuid)}</Text>
+					<Flex direction={'column'} w={'100%'}>
+						<OrderProductGrid
+							currentCustomerUUID={customerData?.find((x) => x.uuid)?.uuid}
+						/>
 					</Flex>
 					<Paper
 						shadow="lg"
