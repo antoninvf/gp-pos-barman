@@ -35,6 +35,27 @@ export const CreateProductButton = (props: ICreateProductButtonProps) => {
 			price: 0,
 			sendToKitchenQueue: true,
 		},
+		validate: (values) => {
+			if (!values.productID) {
+				return { productID: 'This field is required' };
+			} else if (!values.name) {
+				return { name: 'This field is required' };
+			} else if (!values.category) {
+				return { category: 'This field is required' };
+			} else if ((values?.productID?.length || 0) <= 3) {
+				return { productID: 'Product ID must be at least 3 characters long' };
+			} else if ((values?.name?.length || 0) <= 3) {
+				return { name: 'Product name must be at least 3 characters long' };
+			} else if ((values?.name?.length || 0) >= 100) {
+				return { name: 'Product name must be at most 100 characters long' };
+			} else if ((values?.description?.length || 0) >= 100) {
+				return {
+					description:
+						'Product description must be at most 100 characters long',
+				};
+			}
+			return {};
+		},
 	});
 
 	const { submit, isLoading } = useCreateProduct({
