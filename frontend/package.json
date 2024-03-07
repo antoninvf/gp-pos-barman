@@ -7,7 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"api-generate": "openapi-zod-client http://localhost:8001/api-docs/v1/swagger.json -o src/modules/api/zodios/zodios-client.ts -t src/modules/api/zodios/zodios-template.hbs  --with-alias --complexity-threshold=\"<5\" --export-schemas true"
+		"api-generate": "openapi-zod-client http://localhost:7001/api-docs/v1/swagger.json -o src/modules/api/zodios/zodios-client.ts -t src/modules/api/zodios/zodios-template.hbs  --with-alias --complexity-threshold=\"<5\" --export-schemas true"
 	},
 	"dependencies": {
 		"@fontsource/lexend": "^5.0.18",
@@ -41,7 +41,8 @@
 		"next": "14.0.4",
 		"next-auth": "^4.24.6",
 		"react": "18.2.0",
-		"react-dom": "18.2.0"
+		"react-dom": "18.2.0",
+		"react-to-print": "^2.15.1"
 	},
 	"devDependencies": {
 		"@types/node": "20.10.8",
