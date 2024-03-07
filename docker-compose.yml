@@ -54,6 +54,5 @@ services:
       - "7002:80"
     environment:
       PMA_HOST: mariadb
-      PMA_USER: root
     depends_on:
       - mariadb
