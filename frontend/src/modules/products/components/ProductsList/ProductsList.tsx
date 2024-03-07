@@ -26,18 +26,33 @@ export const ProductsList = (props: IProductsListProps) => {
 					</Table.Tr>
 				</Table.Thead>
 				<Table.Tbody>
-					{data?.map(({ id, name, category, price }) => {
-						return (
-							<ProductItem
-								key={id}
-								id={id}
-								name={name}
-								category={category}
-								price={price}
-								currencyData={currencyData}
-							/>
-						);
-					})}
+					{data?.map(
+						({
+							id,
+							name,
+							category,
+							price,
+							imageURL,
+							description,
+							sendToKitchenQueue,
+						}) => {
+							return (
+								<>
+									<ProductItem
+										key={id}
+										id={id || ''}
+										name={name}
+										category={category || ''}
+										price={price}
+										imageURL={imageURL}
+										description={description}
+										sendToKitchenQueue={sendToKitchenQueue || false}
+										currencyData={currencyData}
+									/>
+								</>
+							);
+						},
+					)}
 				</Table.Tbody>
 			</Table>
 		</Flex>
