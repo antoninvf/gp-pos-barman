@@ -33,9 +33,9 @@ export const CreateTableButton = (props: ICreateTableButtonProps) => {
 				return { room: 'This field is required' };
 			} else if (!checked && !values.room) {
 				return { room: 'This field is required' };
-			} else if ((values?.room?.length || 0) <= 3) {
+			} else if ((values?.room?.length || 0) < 3) {
 				return { room: 'Room name must be at least 3 characters long' };
-			} else if ((values?.room?.length || 0) >= 20) {
+			} else if ((values?.room?.length || 0) > 20) {
 				return { room: 'Room name must be at most 20 characters long' };
 			}
 			return {};
