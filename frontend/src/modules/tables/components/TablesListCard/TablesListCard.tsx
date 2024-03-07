@@ -44,6 +44,18 @@ export const TablesListCard = ({ ...props }: ITablesListCardProps) => {
 		initialValues: {
 			room: data?.room || '',
 		},
+		validate: (values) => {
+			if (checked && !values.room) {
+				return { room: 'This field is required' };
+			} else if (!checked && !values.room) {
+				return { room: 'This field is required' };
+			} else if ((values?.room?.length || 0) <= 3) {
+				return { room: 'Room name must be at least 3 characters long' };
+			} else if ((values?.room?.length || 0) >= 20) {
+				return { room: 'Room name must be at most 20 characters long' };
+			}
+			return {};
+		},
 	});
 
 	const { data: customerData } = apiHooks.useGetTableIdcustomer({
@@ -168,7 +180,7 @@ export const TablesListCard = ({ ...props }: ITablesListCardProps) => {
 							rightSection={<IconCheck />}
 							loading={editIsLoading}
 						>
-							Create table
+							Edit table
 						</Button>
 					</Flex>
 				</form>
