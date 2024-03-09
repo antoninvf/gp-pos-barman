@@ -87,6 +87,8 @@ export default function TablesDetail() {
 								mt={'sm'}
 								gap={'sm'}
 								w={'100%'}
+								h={'100%'}
+								pb={'md'}
 								align={'center'}
 								ref={contentToPrint}
 							>
