@@ -1,4 +1,4 @@
-import { Flex } from '@mantine/core';
+import { Flex, ScrollArea } from '@mantine/core';
 import { ProtectedPage } from '~api';
 import Navigation from '~components/Navigation/Navigation';
 import { ProductsList } from '~products';
@@ -9,8 +9,8 @@ export default function Products() {
 		<ProtectedPage>
 			<Flex>
 				<Navigation />
-				<CreateProductButton />
-				<Flex direction={'column'} w={'80%'} p={'1rem'}>
+				<Flex direction={'column'} w={'100%'} p={'1rem'}>
+					<CreateProductButton />
 					<ProductsList />
 				</Flex>
 			</Flex>

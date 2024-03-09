@@ -33,7 +33,7 @@ export const CreateProductButton = (props: ICreateProductButtonProps) => {
 			description: '',
 			imageURL: '',
 			price: 0,
-			sendToKitchenQueue: true,
+			sendToKitchenQueue: false,
 		},
 		validate: (values) => {
 			if (!values.productID) {
@@ -71,20 +71,9 @@ export const CreateProductButton = (props: ICreateProductButtonProps) => {
 
 	return (
 		<>
-			<Tooltip label={'Create a new product'} position={'left'}>
-				<ActionIcon
-					onClick={handleOpen}
-					pos={'absolute'}
-					top={'2rem'}
-					right={'2rem'}
-					variant="light"
-					size={'4rem'}
-					radius={'5rem'}
-				>
-					<IconPlus stroke={1} size={'2.5rem'} />
-				</ActionIcon>
-			</Tooltip>
-
+			<Button onClick={handleOpen} w={'12rem'} mb={'sm'}>
+				Add new product
+			</Button>
 			<Modal
 				opened={opened}
 				onClose={close}
