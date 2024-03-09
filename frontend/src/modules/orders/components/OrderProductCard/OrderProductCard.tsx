@@ -1,11 +1,4 @@
-import {
-	Flex,
-	Text,
-	Card,
-	BackgroundImage,
-	Center,
-	Overlay,
-} from '@mantine/core';
+import { Flex, Text, Card, BackgroundImage } from '@mantine/core';
 import classes from './OrderProductCard.module.css';
 import { apiHooks } from '~/api';
 import { useCreateOrder } from '~orders/hooks';
