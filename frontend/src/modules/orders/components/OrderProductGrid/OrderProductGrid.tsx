@@ -1,4 +1,4 @@
-import { Flex, Skeleton, Tabs } from '@mantine/core';
+import { Flex, ScrollArea, Skeleton, Tabs } from '@mantine/core';
 import { apiHooks } from '~/api';
 import { OrderProductCard } from '../OrderProductCard';
 import { useEffect, useState } from 'react';
@@ -31,7 +31,7 @@ export const OrderProductGrid = ({ ...props }: IOrderProductGridProps) => {
 	if (!data) return null;
 
 	return (
-		<Flex direction={'column'} p={'1rem'} w={'100%'}>
+		<Flex direction={'column'} p={'1rem'} w={'100%'} justify={'center'}>
 			<Tabs value={activeTab} onChange={setActiveTab} w={'100%'}>
 				<Tabs.List>
 					{categories?.map((cat) => (
@@ -43,25 +43,27 @@ export const OrderProductGrid = ({ ...props }: IOrderProductGridProps) => {
 
 				{categories?.map((cat) => (
 					<Tabs.Panel key={cat} value={cat} p={'xl'}>
-						<Flex gap={'1rem'} wrap={'wrap'}>
-							{data
-								?.filter((product) => product.category === cat)
-								.map((prod) => (
-									<Skeleton
-										key={prod.id}
-										visible={disabled}
-										animate={false}
-										w={'10rem'}
-										h={'10rem'}
-									>
-										<OrderProductCard
+						<ScrollArea h={'75vh'}>
+							<Flex gap={'1rem'} wrap={'wrap'}>
+								{data
+									?.filter((product) => product.category === cat)
+									.map((prod) => (
+										<Skeleton
 											key={prod.id}
-											id={prod.id}
-											currentCustomerUUID={props.currentCustomerUUID}
-										/>
-									</Skeleton>
-								))}
-						</Flex>
+											visible={disabled}
+											animate={false}
+											w={'10rem'}
+											h={'10rem'}
+										>
+											<OrderProductCard
+												key={prod.id}
+												id={prod.id}
+												currentCustomerUUID={props.currentCustomerUUID}
+											/>
+										</Skeleton>
+									))}
+							</Flex>
+						</ScrollArea>
 					</Tabs.Panel>
 				))}
 			</Tabs>
