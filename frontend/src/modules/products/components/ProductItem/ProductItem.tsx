@@ -11,10 +11,17 @@ import {
 	TextInput,
 	NumberInput,
 	Tooltip,
+	ScrollArea,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { IconCheck, IconEdit, IconTrash } from '@tabler/icons-react';
+import {
+	IconCheck,
+	IconChefHat,
+	IconEdit,
+	IconPhoto,
+	IconTrash,
+} from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { apiHooks, id, type schemas } from '~api';
 import { useDeleteProduct, useEditProduct } from '~products/hooks';
@@ -109,6 +116,24 @@ export const ProductItem = ({ ...props }: IProductItemProps) => {
 				</Table.Td>
 				<Table.Td>
 					<Flex gap={'sm'} align={'center'}>
+						<Tooltip
+							label={
+								props.sendToKitchenQueue
+									? 'Product is sendable to kitchen queue'
+									: 'Product is not sendable to kitchen queue'
+							}
+						>
+							<IconChefHat opacity={props.sendToKitchenQueue ? 1 : 0.3} />
+						</Tooltip>
+						<Tooltip
+							label={props.imageURL ? 'Product has an image' : 'No image'}
+						>
+							<IconPhoto opacity={props.imageURL ? 1 : 0.3} />
+						</Tooltip>
+					</Flex>
+				</Table.Td>
+				<Table.Td>
+					<Flex gap={'sm'} align={'center'} justify={'right'} mr={'sm'}>
 						<ActionIcon size={'2.5rem'} onClick={() => handleEditOpen()}>
 							<IconEdit size={'1.5rem'} />
 						</ActionIcon>
