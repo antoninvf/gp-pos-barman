@@ -380,6 +380,16 @@ public class BarmanController : ControllerBase
         return Ok();
     }
     
+    [HttpDelete("order/{id}")]
+    public IActionResult DeleteOrder(int id)
+    {
+        var orderEntity = _dbContext.OrderEntities.Find(id);
+        if (orderEntity == null) return NotFound("Order not found");
+        _dbContext.OrderEntities.Remove(orderEntity);
+        _dbContext.SaveChanges();
+        return Ok();
+    }
+    
     //? Users
     [HttpGet("users")]
     public ActionResult<IEnumerable<UserEntity>> GetUsers()
@@ -449,15 +459,12 @@ public class BarmanController : ControllerBase
         return new ActionResult<string>(configuration.Value);
     }
     
-    [HttpPost("configuration")]
+    [HttpPut("configuration")]
     public IActionResult PostConfiguration([FromBody] ConfigurationModel configurationModel)
     {
-        var configurationEntity = new ConfigurationEntity
-        {
-            SettingName = configurationModel.SettingName,
-            Value = configurationModel.Value
-        };
-        _dbContext.ConfigurationEntities.Add(configurationEntity);
+        var configuration = _dbContext.ConfigurationEntities.FirstOrDefault(x => x.SettingName == configurationModel.SettingName);
+        if (configuration == null) return NotFound("Setting not found");
+        configuration.Value = configurationModel.Value;
         _dbContext.SaveChanges();
         return Ok();
     }
