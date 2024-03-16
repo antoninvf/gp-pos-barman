@@ -108,10 +108,31 @@ using (var serviceScope = app.Services.GetService<IServiceScopeFactory>()?.Creat
     var context = serviceScope?.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     if (!(context?.ConfigurationEntities).Any())
     {
+        // Default configuration
         context?.ConfigurationEntities.Add(new()
         {
             SettingName = "currency",
             Value = "Kč"
+        });
+        //context?.ConfigurationEntities.Add(new()
+        //{
+        //    SettingName = "tax",
+        //    Value = "21"
+        //});
+        context?.ConfigurationEntities.Add(new()
+        {
+            SettingName = "restaurant_name",
+            Value = "The Restaurant Name"
+        });
+        context?.ConfigurationEntities.Add(new()
+        {
+            SettingName = "restaurant_address",
+            Value = "The Restaurant Address"
+        });
+        context?.ConfigurationEntities.Add(new()
+        {
+            SettingName = "restaurant_phone",
+            Value = "The Restaurant Phone"
         });
         context?.SaveChanges();
     }
@@ -126,10 +147,27 @@ using (var serviceScope = app.Services.GetService<IServiceScopeFactory>()?.Creat
         context?.UserEntities.Add(new()
         {
             UUID = Guid.NewGuid().ToString(),
-            Username = "admin",
-            Password = BCrypt.Net.BCrypt.HashPassword("admin123"),
+            Username = Environment.GetEnvironmentVariable("ADMIN_USERNAME"),
+            Password = BCrypt.Net.BCrypt.HashPassword(Environment.GetEnvironmentVariable("ADMIN_PASSWORD"))
         });
         context?.SaveChanges();
+    }
+    // update the user if it exists and if the password or username is different
+    else if (context?.UserEntities.Count() == 1)
+    {
+        var user = context?.UserEntities.First();
+        
+        if (user.Username != Environment.GetEnvironmentVariable("ADMIN_USERNAME"))
+        {
+            user.Username = Environment.GetEnvironmentVariable("ADMIN_USERNAME");
+            context?.SaveChanges();
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(Environment.GetEnvironmentVariable("ADMIN_PASSWORD"), user.Password))
+        {
+            user.Password = BCrypt.Net.BCrypt.HashPassword(Environment.GetEnvironmentVariable("ADMIN_PASSWORD"));
+            context?.SaveChanges();
+        }
     }
 }
 
