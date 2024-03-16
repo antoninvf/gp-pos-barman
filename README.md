@@ -15,7 +15,7 @@ After you have installed Docker, create a .env file in the root of the project w
 Then run docker compose to start the project
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 # Frontend
