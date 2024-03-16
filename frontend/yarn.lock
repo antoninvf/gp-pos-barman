@@ -573,6 +573,21 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
+"@react-thermal-printer/image@^0.11.1":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@react-thermal-printer/image/-/image-0.11.1.tgz#939f63f987e40fa51dc2ab32a76c682ff0173e4e"
+  integrity sha512-ocGGjZdb2n4CWfrbGPlhus45bwh2Tu8Oc1Juiyq775kZ+ux1QRzvADEX4/aMUMYOXmZs2MK0ckWOa8LqcxmtCQ==
+  dependencies:
+    floyd-steinberg "^1.0.6"
+
+"@react-thermal-printer/printer@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@react-thermal-printer/printer/-/printer-0.15.0.tgz#28ab06eec421b239edc11bc07c3b3bdc3970ff3f"
+  integrity sha512-WJxEmu8XfUGdBtZLwaS+lWTP37cZP6V+LVW5L39TOqr6OewTPBDlKpPVlyMbL48uGJFmf2Ztil25ytQ+lvAgzA==
+  dependencies:
+    "@react-thermal-printer/image" "^0.11.1"
+    iconv-lite "^0.6.3"
+
 "@remirror/core-constants@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@remirror/core-constants/-/core-constants-2.0.2.tgz#f05eccdc69e3a65e7d524b52548f567904a11a1a"
@@ -1336,6 +1351,11 @@ chalk@^4.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
+classnames@^2.3.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
+  integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
+
 client-only@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
@@ -2064,6 +2084,11 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.6.tgz#022e9218c637f9f3fc9c35ab9c9193f05add60b2"
   integrity sha512-0sQoMh9s0BYsm+12Huy/rkKxVu4R1+r96YX5cG44rHV0pQ6iC3Q+mkoMFaGWObMFYQxCVT+ssG1ksneA2MI9KQ==
 
+floyd-steinberg@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/floyd-steinberg/-/floyd-steinberg-1.0.6.tgz#9c0f53f43bccd828552883d85fcec658c3da95dc"
+  integrity sha512-gzlre+taSQzEY+nCusbHJFQ3zHXBkRAX4fe3szssPY/N/t1ClBX9hnHZM4o8ZvpdqLLUPEavuZ/Noj71ZaA8+A==
+
 follow-redirects@^1.15.4:
   version "1.15.4"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.4.tgz#cdc7d308bf6493126b17ea2191ea0ccf3e535adf"
@@ -2371,6 +2396,13 @@ highlight.js@^11.9.0:
   version "11.9.0"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.9.0.tgz#04ab9ee43b52a41a047432c8103e2158a1b8b5b0"
   integrity sha512-fJ7cW7fQGCYAkgv4CPfwFHrfd/cLS4Hau96JuJ+ZTOWhjnhoeN1ub1tFmALm/+lW5z4WCAuAV9bm05AP0mS6Gw==
+
+iconv-lite@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.6.3.tgz#a52f80bf38da1952eb5c681790719871a1a72501"
+  integrity sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==
+  dependencies:
+    safer-buffer ">= 2.1.2 < 3.0.0"
 
 ignore@^5.2.0:
   version "5.2.0"
@@ -2942,6 +2974,11 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+
+net@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/net/-/net-1.0.2.tgz#d1757ec9a7fb2371d83cf4755ce3e27e10829388"
+  integrity sha512-kbhcj2SVVR4caaVnGLJKmlk2+f+oLkjqdKeQlmUtz6nGzOpbcobwVIeSURNgraV/v3tlmGIX82OcPCl0K6RbHQ==
 
 next-auth@^4.24.6:
   version "4.24.6"
@@ -3610,6 +3647,15 @@ react-textarea-autosize@8.5.3:
     use-composed-ref "^1.3.0"
     use-latest "^1.2.1"
 
+react-thermal-printer@^0.18.1:
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/react-thermal-printer/-/react-thermal-printer-0.18.1.tgz#e238a25a5ba16fde920feb8f6e9152404c012a56"
+  integrity sha512-5ibDqPYtQhlPRVhv+aNjO2RCjxwfGG30BkH95pEUnzq62RrfZkM2hMfbelnS+PbxA6IotaaZqwsqWD0mx++mtQ==
+  dependencies:
+    "@react-thermal-printer/image" "^0.11.1"
+    "@react-thermal-printer/printer" "^0.15.0"
+    classnames "^2.3.1"
+
 react-to-print@^2.15.1:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.15.1.tgz#c9a6732cadf1118fc90d886b54a9388c419561b9"
@@ -3751,6 +3797,11 @@ safe-regex-test@^1.0.0:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.3"
     is-regex "^1.1.4"
+
+"safer-buffer@>= 2.1.2 < 3.0.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
+  integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
 scheduler@^0.23.0:
   version "0.23.0"
