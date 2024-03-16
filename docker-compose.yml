@@ -36,6 +36,8 @@ services:
       DB_VERSION_MINOR: 11
       DB_VERSION_BUILD: 3
       API_KEY: ${API_KEY}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
   mariadb:
     image: mariadb:10.11.3
     restart: always
