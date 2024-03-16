@@ -1,4 +1,4 @@
-import { Flex, Title } from '@mantine/core';
+import { Flex, Grid, ScrollArea, Title } from '@mantine/core';
 import { IconClockPause } from '@tabler/icons-react';
 import { apiHooks } from '~/api';
 import { KitchenQueueItem } from '~kitchenQueue';
@@ -23,18 +23,20 @@ export const KitchenQueueList = (props: IKitchenQueueProps) => {
 		);
 
 	return (
-		<Flex wrap="wrap" gap={'sm'}>
-			{data?.map(({ id, order, timestamp }) => {
-				if (!timestamp) return null;
-				return (
-					<KitchenQueueItem
-						key={id}
-						id={id}
-						order={order}
-						timestamp={timestamp}
-					/>
-				);
-			})}
-		</Flex>
+		<ScrollArea h={'95vh'} scrollbars="y">
+			<Grid justify="flex-start" align="stretch">
+				{data?.map(({ id, order, timestamp }) => {
+					if (!timestamp) return null;
+					return (
+						<KitchenQueueItem
+							key={id}
+							id={id}
+							order={order}
+							timestamp={timestamp}
+						/>
+					);
+				})}
+			</Grid>
+		</ScrollArea>
 	);
 };
