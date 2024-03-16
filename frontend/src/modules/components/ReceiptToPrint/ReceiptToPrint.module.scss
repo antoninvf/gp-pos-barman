@@ -1,0 +1,9 @@
+.receipt {
+    display: none;
+}
+
+@media print {
+    .receipt {
+        display: flex;
+    }
+}
