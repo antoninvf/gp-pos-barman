@@ -1,4 +1,4 @@
-import { Flex, ScrollArea, Skeleton, Tabs } from '@mantine/core';
+import { Flex, Grid, ScrollArea, Skeleton, Tabs } from '@mantine/core';
 import { apiHooks } from '~/api';
 import { OrderProductCard } from '../OrderProductCard';
 import { useEffect, useState } from 'react';
@@ -43,26 +43,28 @@ export const OrderProductGrid = ({ ...props }: IOrderProductGridProps) => {
 
 				{categories?.map((cat) => (
 					<Tabs.Panel key={cat} value={cat} p={'xl'}>
-						<ScrollArea h={'75vh'}>
-							<Flex gap={'1rem'} wrap={'wrap'}>
+						<ScrollArea h={'75vh'} scrollbars="y">
+							<Grid>
 								{data
 									?.filter((product) => product.category === cat)
 									.map((prod) => (
-										<Skeleton
-											key={prod.id}
-											visible={disabled}
-											animate={false}
-											w={'10rem'}
-											h={'10rem'}
-										>
-											<OrderProductCard
+										<Grid.Col key={prod.id} span={'content'}>
+											<Skeleton
 												key={prod.id}
-												id={prod.id}
-												currentCustomerUUID={props.currentCustomerUUID}
-											/>
-										</Skeleton>
+												visible={disabled}
+												animate={false}
+												w={'10rem'}
+												h={'10rem'}
+											>
+												<OrderProductCard
+													key={prod.id}
+													product={prod}
+													currentCustomerUUID={props.currentCustomerUUID}
+												/>
+											</Skeleton>
+										</Grid.Col>
 									))}
-							</Flex>
+							</Grid>
 						</ScrollArea>
 					</Tabs.Panel>
 				))}
