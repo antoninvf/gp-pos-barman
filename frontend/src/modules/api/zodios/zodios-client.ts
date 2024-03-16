@@ -116,9 +116,9 @@ const endpoints = makeApi([
     response: z.array(ConfigurationEntity),
   },
   {
-    method: "post",
+    method: "put",
     path: "/configuration",
-    alias: "postConfiguration",
+    alias: "putConfiguration",
     requestFormat: "json",
     parameters: [
       {
@@ -310,6 +310,20 @@ const endpoints = makeApi([
       },
     ],
     response: OrderEntity,
+  },
+  {
+    method: "delete",
+    path: "/order/:id",
+    alias: "deleteOrderId",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "id",
+        type: "Path",
+        schema: id,
+      },
+    ],
+    response: z.void(),
   },
   {
     method: "get",
