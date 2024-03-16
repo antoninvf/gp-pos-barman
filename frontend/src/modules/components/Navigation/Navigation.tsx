@@ -47,14 +47,9 @@ export default function Navigation({}: NavigationProps) {
 			href: '/kitchen',
 		},
 		{
-			icon: <IconUser size={iconSize} stroke={1.5} />,
-			label: 'Users',
-			href: '/users',
-		},
-		{
 			icon: <IconCat size={iconSize} stroke={1.5} />,
 			label: 'Application Settings',
-			href: '/admin/appSettings',
+			href: '/appSettings',
 		},
 	];
 
