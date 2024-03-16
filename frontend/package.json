@@ -38,10 +38,12 @@
 		"dayjs": "^1.11.10",
 		"embla-carousel-react": "^8.0.0-rc19",
 		"moment": "^2.30.1",
+		"net": "^1.0.2",
 		"next": "14.0.4",
 		"next-auth": "^4.24.6",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
+		"react-thermal-printer": "^0.18.1",
 		"react-to-print": "^2.15.1"
 	},
 	"devDependencies": {
