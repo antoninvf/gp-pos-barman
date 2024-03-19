@@ -11,13 +11,12 @@ import {
 	Tooltip,
 } from '@mantine/core';
 import classes from './OrderProductCard.module.css';
-import { ProductEntity, apiHooks, schemas } from '~/api';
+import { ProductEntity, apiHooks } from '~/api';
 import { useCreateOrder } from '~orders/hooks';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck, IconChefHat } from '@tabler/icons-react';
 import { useState } from 'react';
 import { z } from 'zod';
-import { useForm } from '@mantine/form';
 
 interface IOrderProductCardProps {
 	product: z.infer<typeof ProductEntity>;
@@ -32,21 +31,6 @@ export const OrderProductCard = ({ ...props }: IOrderProductCardProps) => {
 	const handleOpen = () => {
 		open();
 	};
-
-	// useform
-	const form = useForm<z.infer<typeof schemas.OrderModel>>({
-		initialValues: {
-			productID: props.product.id,
-			notes: '',
-			customerUUID: props.currentCustomerUUID,
-		},
-		validate: (values) => {
-			if (!values.notes) {
-				return { notes: 'This field is required' };
-			}
-			return {};
-		},
-	});
 
 	const [note, setNote] = useState('');
 
@@ -99,41 +83,42 @@ export const OrderProductCard = ({ ...props }: IOrderProductCardProps) => {
 				title={props.product?.name}
 				centered
 			>
-				<form
-					onSubmit={form.onSubmit((values) =>
-						submit({ ...values, notes: note }),
-					)}
-				>
-					<Grid>
-						<Grid.Col span={12}>
-							<Tooltip
-								hidden={props.product?.sendToKitchenQueue?.toString() == 'true'}
-								label="Notes are only available on items sent to the kitchen"
-								openDelay={500}
-							>
-								<TextInput
-									label={'Note'}
-									placeholder={'Enter a note for the order'}
-									disabled={
-										props.product?.sendToKitchenQueue?.toString() == 'false'
-									}
-									value={note}
-									onChange={(e) => setNote(e.currentTarget.value)}
-								/>
-							</Tooltip>
-						</Grid.Col>
-					</Grid>
-					<Flex justify={'right'} mt={'1rem'} gap={'xs'}>
-						<Button
-							variant={'filled'}
-							rightSection={<IconCheck />}
-							loading={isLoading}
-							type="submit"
+				<Grid>
+					<Grid.Col span={12}>
+						<Tooltip
+							hidden={props.product?.sendToKitchenQueue?.toString() == 'true'}
+							label="Notes are only available on items sent to the kitchen"
+							openDelay={500}
 						>
-							Add to order
-						</Button>
-					</Flex>
-				</form>
+							<TextInput
+								label={'Note'}
+								placeholder={'Enter a note for the order'}
+								disabled={
+									props.product?.sendToKitchenQueue?.toString() == 'false'
+								}
+								value={note}
+								onChange={(e) => setNote(e.currentTarget.value)}
+							/>
+						</Tooltip>
+					</Grid.Col>
+				</Grid>
+				<Flex justify={'right'} mt={'1rem'} gap={'xs'}>
+					<Button
+						variant={'filled'}
+						rightSection={<IconCheck />}
+						loading={isLoading}
+						onClick={() => {
+							submit({
+								productID: props.product.id,
+								notes: note,
+								customerUUID: props.currentCustomerUUID,
+							});
+							close();
+						}}
+					>
+						Add to order
+					</Button>
+				</Flex>
 			</Modal>
 		</>
 	);
