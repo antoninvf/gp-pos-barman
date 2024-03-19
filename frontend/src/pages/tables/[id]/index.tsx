@@ -180,6 +180,7 @@ export default function TablesDetail() {
 								<Button
 									style={buttonStyle}
 									color="green"
+									disabled={(customerData?.length || 0) > 0 ? false : true}
 									leftSection={<IconCheck />}
 									onClick={() => handleOpen()}
 								>
