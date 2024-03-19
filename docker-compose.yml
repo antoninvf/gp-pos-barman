@@ -49,12 +49,12 @@ services:
       MYSQL_CHARSET: utf8mb4_unicode_ci
     volumes:
       - ./mariadb-data:/var/lib/mysql
-  phpmyadmin:
+  adminer:
     image: phpmyadmin:latest
     restart: always
     ports:
-      - "7002:80"
+      - "7002:8080"
     environment:
-      PMA_HOST: mariadb
+      ADMINER_DEFAULT_SERVER: mariadb
     depends_on:
       - mariadb
