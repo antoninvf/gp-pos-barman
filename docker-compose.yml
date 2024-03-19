@@ -50,7 +50,7 @@ services:
     volumes:
       - ./mariadb-data:/var/lib/mysql
   adminer:
-    image: phpmyadmin:latest
+    image: adminer:latest
     restart: always
     ports:
       - "7002:8080"
